@@ -72,7 +72,7 @@
 ///////////// CRC STYLE DEFAULTS ///////////////////////////////
 
 // style defaults for the entire document
-#let crc-style-defaults = (
+#let table-style-defaults = (
   table-header-fill: col_mediumback,
   table-subheader-fill: col_mediumback.lighten(20%),
   table-row-fill: col_lightback,

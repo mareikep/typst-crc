@@ -154,42 +154,42 @@
     stroke: (col, row) => if row == 0 { 
     (
       top: (
-        thickness: defs.crc-style-defaults.table-stroke-thick, 
-        paint: defs.crc-style-defaults.table-stroke-paint
+        thickness: defs.table-style-defaults.table-stroke-thick, 
+        paint: defs.table-style-defaults.table-stroke-paint
       ), 
     ) } else if row == lastrow { 
     (
       bottom: (
-        thickness: defs.crc-style-defaults.table-stroke-thick, 
-        paint: defs.crc-style-defaults.table-stroke-paint
+        thickness: defs.table-style-defaults.table-stroke-thick, 
+        paint: defs.table-style-defaults.table-stroke-paint
       )
     ) } else if row in thinline {
       (
         bottom: (
-          thickness: defs.crc-style-defaults.table-stroke-thin, 
-          paint: defs.crc-style-defaults.table-stroke-paint
+          thickness: defs.table-style-defaults.table-stroke-thin, 
+          paint: defs.table-style-defaults.table-stroke-paint
         )
       )
     } else if row in strongline {
       (
         bottom: (
-          thickness: defs.crc-style-defaults.table-stroke-thick, 
-          paint: defs.crc-style-defaults.table-stroke-paint
+          thickness: defs.table-style-defaults.table-stroke-thick, 
+          paint: defs.table-style-defaults.table-stroke-paint
         )        
       )
     } else { none },
     fill: (col, row) => 
-    if row == 0 { defs.crc-style-defaults.table-header-fill } // first line of header is always filled
+    if row == 0 { defs.table-style-defaults.table-header-fill } // first line of header is always filled
     else if calc.odd(row) { // let first row of body always be white, then alternate
       if bodystart != none and calc.odd(bodystart) {
         none 
       } else { 
-        defs.crc-style-defaults.table-row-fill 
+        defs.table-style-defaults.table-row-fill 
       }
     } 
     else { 
       if bodystart != none and calc.odd(bodystart) {
-        defs.crc-style-defaults.table-row-fill 
+        defs.table-style-defaults.table-row-fill 
       } else { 
         none
       }

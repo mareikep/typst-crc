@@ -28,20 +28,20 @@
       (
         bottom: (
           thickness: 2pt, 
-          paint: defs.crc-style-defaults.table-stroke-paint
+          paint: defs.table-style-defaults.table-stroke-paint
         ), 
       ) 
     } else if row == numrows {
       (
         bottom: (
           thickness: 2pt, 
-          paint: defs.crc-style-defaults.table-stroke-paint
+          paint: defs.table-style-defaults.table-stroke-paint
         ), 
       )
     },
     fill: (col, row) => {
       if row != 0 and not calc.odd(row) {
-        defs.crc-style-defaults.table-row-fill 
+        defs.table-style-defaults.table-row-fill 
       }
     }, 
     columns: (1fr, .1fr, .15fr),
@@ -100,13 +100,13 @@
     table.header(
       repeat: true,
       [*Project leader*], [*Gender*], [*Doctorate obtained in*], [*Home institution,\ location*], [*Project(s)*],
-      table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     // repheader(
     //   table.header(
     //   repeat: true,
     //   [*Project leader*], [*Gender*], [*Doctorate obtained in*], [*Home institution,\ location*], [*Project(s)*],
-    //   table.hline(start: 0, end: 5, stroke: crc-style-defaults.table-stroke-thin),
+    //   table.hline(start: 0, end: 5, stroke: table-style-defaults.table-stroke-thin),
     // ), 
     //   table.cell(colspan: 5, align: left, [#text(9pt, [...continued from the previous page.])]),
     //   rep-counter
@@ -194,7 +194,7 @@
         table.header(
           repeat: true,
           [*Project*], [*Status*], [*Title*], [*Research area*], [*Projet leader(s),\ institute(s),\ location(s)*],
-          table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+          table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
         ),
         ..tablebody,
       )
@@ -219,7 +219,7 @@
     table.header(
       repeat: true,
       [*Project*], [*Status*], [*Title*], [*Research area*], [*Projet leader(s),\ institute(s),\ location(s)*],
-      table.hline(start: 0, end: 5, stroke: defs.crc-style-defaults.table-stroke-thin),
+      table.hline(start: 0, end: 5, stroke: defs.table-style-defaults.table-stroke-thin),
     ),
     ..tablebody
   )
@@ -260,7 +260,7 @@
     table.header(
       repeat: true,
       [*Project*], [*Surname, first name*], [*Type of\ funding*], [*Topic*], [*Duration*],
-      table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
   )
@@ -300,7 +300,7 @@
         [*Number of\ researchers in total*],
       ),
       [male], [female], [male], [female],
-      table.hline(start: 0, end: 6, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 6, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
   )
@@ -352,7 +352,7 @@
         colspan: 2,
         [*Status Quo#super([a])*],
       ), [*Objective\ [%]*], [], [*Number*], [*[%]*], [],
-      table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
     table.footer(
@@ -514,7 +514,7 @@
       [*f*], [*m*], [*d*],
       [*f*], [*m*], [*d*],
       [*f*],
-      table.hline(start: 0, end: 9, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 9, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
     table.footer(
@@ -551,7 +551,7 @@
     table.header(
       repeat: true,
       [*PI*], [*Project*], [*Project title*], [*Funding\ period*], [*Funding agency*],
-      table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody
   )
@@ -589,10 +589,10 @@
       [#num(it.otherFunds)], 
       [#num(it.applicantInstitution + it.otherInstitution + it.otherFunds)])) + 
       (
-        table.cell(fill: defs.crc-style-defaults.table-subheader-fill, 
+        table.cell(fill: defs.table-style-defaults.table-subheader-fill, 
         [*Ending funding\ period*]), 
-        sums-ending.map(it => table.cell(fill: defs.crc-style-defaults.table-subheader-fill,[#num(it)])).flatten(), 
-        table.cell(fill: defs.crc-style-defaults.table-subheader-fill,[#num(total-ending)])
+        sums-ending.map(it => table.cell(fill: defs.table-style-defaults.table-subheader-fill,[#num(it)])).flatten(), 
+        table.cell(fill: defs.table-style-defaults.table-subheader-fill,[#num(total-ending)])
       ),
       funds.next.map(it => (
         [#crcdata.funding-years.at((it.year - 1))],
@@ -601,9 +601,9 @@
         [#num(it.otherFunds)], 
         [#num(it.applicantInstitution + it.otherInstitution + it.otherFunds)])) + 
       (
-        table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [*New funding period*]), 
-        sums-next.map(it => table.cell(fill: defs.crc-style-defaults.table-subheader-fill,[#num(it)])).flatten(), 
-        table.cell(fill: defs.crc-style-defaults.table-subheader-fill,[#num(total-next)])
+        table.cell(fill: defs.table-style-defaults.table-subheader-fill, [*New funding period*]), 
+        sums-next.map(it => table.cell(fill: defs.table-style-defaults.table-subheader-fill,[#num(it)])).flatten(), 
+        table.cell(fill: defs.table-style-defaults.table-subheader-fill,[#num(total-next)])
       ),
   ).flatten()
 
@@ -621,7 +621,7 @@
     table.header(
       repeat: true,
       [*Funding period*], [*Core support provided by applicant university*], [*Core support\ provided by\ other participating institutions*], [*Other\ funds*], [*Total*],
-      table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
     table.footer(
@@ -683,7 +683,7 @@
         [*at other participating\ institutions#super([a])*],
       ),
       [*#aux-unis.at(aux-unis.keys().at(0))*], ..aux-unis.keys().filter(it => it != aux-unis.keys().at(0)).map(it => [*#it*]),
-      table.hline(start: 0, end: aux-unis.len() + 1, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: aux-unis.len() + 1, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
     table.footer(
@@ -731,7 +731,7 @@
     table.header(
       repeat: true,
       [*Project*], [*Description of instrumentation*], [*Year of\ purchase*], [*Cost of\ purchase*], [*Source of\ funding*],
-      table.hline(start: 0, end: 5, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 5, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     ..tablebody,
     table.footer(
@@ -770,13 +770,13 @@
     [#num-or-zero(funds.previous.at(it).staff + funds.previous.at(it).directCosts + funds.previous.at(it).instrumentation + funds.previous.at(it).fellowships + funds.previous.at(it).globalFunds)]
   ))
   let tb-previous-total = funds.previous.keys().filter(it => it == "Total").map(it => (
-    [#table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [*Previous funding period*])],
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).staff)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).directCosts)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).instrumentation)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).fellowships)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).globalFunds)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).staff + funds.previous.at(it).directCosts + funds.previous.at(it).instrumentation + funds.previous.at(it).fellowships + funds.previous.at(it).globalFunds)])
+    [#table.cell(fill: defs.table-style-defaults.table-subheader-fill, [*Previous funding period*])],
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).staff)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).directCosts)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).instrumentation)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).fellowships)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).globalFunds)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.previous.at(it).staff + funds.previous.at(it).directCosts + funds.previous.at(it).instrumentation + funds.previous.at(it).fellowships + funds.previous.at(it).globalFunds)])
   ))
   let tb-applying = funds.next.keys().filter(it => it != "Total").map(it => (
     [#crcdata.funding-years.at(int(it) - 1)],
@@ -788,17 +788,17 @@
     [#num-or-zero(funds.next.at(it).staff + funds.next.at(it).directCosts + funds.next.at(it).instrumentation + funds.next.at(it).fellowships + funds.next.at(it).globalFunds)]
   ))
   let tb-applying-total = funds.next.keys().filter(it => it == "Total").map(it => (
-    [#table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [*New funding period*])],
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).staff)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).directCosts)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).instrumentation)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).fellowships)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).globalFunds)]),
-    table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).staff + funds.next.at(it).directCosts + funds.next.at(it).instrumentation + funds.next.at(it).fellowships + funds.next.at(it).globalFunds)])
+    [#table.cell(fill: defs.table-style-defaults.table-subheader-fill, [*New funding period*])],
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).staff)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).directCosts)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).instrumentation)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).fellowships)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).globalFunds)]),
+    table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(funds.next.at(it).staff + funds.next.at(it).directCosts + funds.next.at(it).instrumentation + funds.next.at(it).fellowships + funds.next.at(it).globalFunds)])
   ))
   let tablebody = (tb-previous + tb-applying).flatten()
 
-  let headercell = table.cell.with(align: center+horizon, fill: defs.crc-style-defaults.table-row-fill)
+  let headercell = table.cell.with(align: center+horizon, fill: defs.table-style-defaults.table-row-fill)
   let numrows = 2 + funds.previous.len() + funds.next.len() - 1
   table(
     ..table-settings-default(
@@ -821,26 +821,26 @@
       ),
       table.cell(
         align: center+top,
-        fill: defs.crc-style-defaults.table-header-fill, 
+        fill: defs.table-style-defaults.table-header-fill, 
         []
       ),
       headercell([*Staff*]), headercell([*Direct costs*]), headercell([*Instrumentation*]), headercell([*Fellowships*]), headercell([*Global\ funds*]), 
        table.cell(
         align: center+top,
-        fill: defs.crc-style-defaults.table-header-fill, 
+        fill: defs.table-style-defaults.table-header-fill, 
         [*Total*]
       ),
-      table.hline(start: 0, end: 7, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 7, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
     ),
     // ..tablebody,
     
     ..tb-previous.flatten(),
-    table.hline(start: 0, end: 7, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 7, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ..tb-previous-total.flatten(),
-    table.hline(start: 0, end: 7, stroke: (thickness: defs.crc-style-defaults.table-stroke-thick, paint: defs.crc-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 7, stroke: (thickness: defs.table-style-defaults.table-stroke-thick, paint: defs.table-style-defaults.table-stroke-paint)),
     
     ..tb-applying.flatten(),
-    table.hline(start: 0, end: 7, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 7, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ..tb-applying-total.flatten(),
     table.footer(
       table.cell(
@@ -879,7 +879,7 @@
 
   let tablebody-totals = funds.filter(proj => proj.project == "Total").map(proj => (
     proj.keys().map(year => (
-      table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [*#num-or-cross(proj.at(year))*]),
+      table.cell(fill: defs.table-style-defaults.table-subheader-fill, [*#num-or-cross(proj.at(year))*]),
     )).flatten()
   )).flatten()
   
@@ -899,19 +899,19 @@
       let st = (:)
       
       if col in (1,) + cols-left-line { 
-        st = (left: (thickness: 1pt, paint: defs.crc-style-defaults.table-stroke-paint)) } 
+        st = (left: (thickness: 1pt, paint: defs.table-style-defaults.table-stroke-paint)) } 
       if bodystart != none and row == bodystart { 
         st = st + (
           top: (
             thickness: 1pt, 
-            paint: defs.crc-style-defaults.table-stroke-paint
+            paint: defs.table-style-defaults.table-stroke-paint
           )
         ) 
       } else if row == lastrow { 
         st = st + (
           bottom: (
             thickness: 2pt, 
-            paint: defs.crc-style-defaults.table-stroke-paint
+            paint: defs.table-style-defaults.table-stroke-paint
           )
         ) 
       } 
@@ -931,7 +931,7 @@
       ..s-crc-data.get().crc.funding-years.map(yr => 
         positions.map(pos => 
           table.cell(
-          fill: defs.crc-style-defaults.table-header-fill,
+          fill: defs.table-style-defaults.table-header-fill,
           align: left,
             box(
               height: 4cm, 
@@ -943,7 +943,7 @@
         ))).flatten(),     
     ),
     ..tablebody,
-    table.hline(start: 0, end: 1+(s-crc-data.get().crc.funding-years.len()*5), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 1+(s-crc-data.get().crc.funding-years.len()*5), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ..tablebody-totals
   )
 }
@@ -977,9 +977,9 @@
     table.cell(
       align: left+top,
       colspan: 2,
-      fill: defs.crc-style-defaults.table-subheader-fill,
+      fill: defs.table-style-defaults.table-subheader-fill,
       [#h(2em)*Total*]
-    ), sums.map(it => table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [#num-or-zero(it)]))).flatten()
+    ), sums.map(it => table.cell(fill: defs.table-style-defaults.table-subheader-fill, [#num-or-zero(it)]))).flatten()
 
   let numcols = 2 + yrs.len()
   let numrows = funds_.len() + 2
@@ -1007,13 +1007,13 @@
       ),
       ..s-crc-data.get().crc.funding-years.map(yr => table.cell(
         align: center,
-        fill: defs.crc-style-defaults.table-header-fill,
-        stroke: (bottom: (paint: defs.crc-style-defaults.table-stroke-paint)),
+        fill: defs.table-style-defaults.table-header-fill,
+        stroke: (bottom: (paint: defs.table-style-defaults.table-stroke-paint)),
         [*#yr*])),
-      table.hline(start: 0, end: 2 + (s-crc-data.get().crc.funding-years.len()), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+      table.hline(start: 0, end: 2 + (s-crc-data.get().crc.funding-years.len()), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ),
     ..tablebody,
-    table.hline(start: 0, end: 2 + (s-crc-data.get().crc.funding-years.len()), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 2 + (s-crc-data.get().crc.funding-years.len()), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ..tablebody-totals,
     table.footer(
       table.cell(
@@ -1049,7 +1049,7 @@
     table.header(
       repeat: true,
       [*Project*], [*Species*], [*Quantity*], [*Average\ number of\ weeks kept*], [*Upkeep costs\ per animal\ per week*], [*Purchasing costs\ per animal*], [*Requested funds*], [*Existing funds*],
-      table.hline(start: 0, end: 8, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+      table.hline(start: 0, end: 8, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ),
     ..tablebody,
     table.footer(
@@ -1104,7 +1104,7 @@
 
     if cat-staff != () {
       cat-staff = cat-staff + (
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         [*Total*], 
         funds-staff-totals.map(it => (
           ([], [#num-or-zero(it)])
@@ -1135,7 +1135,7 @@
     
     if cat-costs != () {
       cat-costs = (cat-costs + (
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         [*Total*], 
         funds-costs-totals.map(it => (
           ([], [#num-or-zero(it)])
@@ -1166,7 +1166,7 @@
     
     if cat-fellow != () {
       cat-fellow = (cat-fellow + (
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         [*Total*], 
         funds-fellow-totals.map(it => (
           ([], [#num-or-zero(it)])
@@ -1197,7 +1197,7 @@
     
     if cat-instrumentation != () {
       cat-instrumentation = (cat-instrumentation + (
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         [*Total*], 
         funds-instrumentation-totals.map(it => (
           ([], [#num-or-zero(it)])
@@ -1310,9 +1310,9 @@
         fill:  (col, row) => 
           if row == 0 { 
             // first line of header is always filled
-            defs.crc-style-defaults.table-header-fill 
+            defs.table-style-defaults.table-header-fill 
           } else if row in fills {
-            defs.crc-style-defaults.table-subheader-fill
+            defs.table-style-defaults.table-subheader-fill
           } else if row in nofills {
             none
           }          
@@ -1325,7 +1325,7 @@
               }
             }
             if not calc.odd(row - closest) {
-              defs.crc-style-defaults.table-row-fill  
+              defs.table-style-defaults.table-row-fill  
             }          
           },
         columns: (1fr,) + ((.5fr, .3fr))*num-years,
@@ -1335,16 +1335,16 @@
             colspan: 2,
             [*#year*],
           )),
-          table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))
+          table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))
         ), // header
         ..cat-staff,
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         ..cat-costs,
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         ..cat-fellow,
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         ..cat-instrumentation,
-        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 2 + (num-years*2), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
         ..totals,
         table.footer(
           table.cell(
@@ -1403,7 +1403,7 @@
     if staff-existing-research + staff-existing-nonresearch != () {
       body-existing = body-existing + (
         (
-          table.cell(colspan: 8, align: left+horizon, fill: defs.crc-style-defaults.table-subheader-fill, [*Existing Staff*]),
+          table.cell(colspan: 8, align: left+horizon, fill: defs.table-style-defaults.table-subheader-fill, [*Existing Staff*]),
         )
       )
     }
@@ -1411,7 +1411,7 @@
     // add research staff content
     if staff-existing-research != () {
       body-existing = body-existing + (
-          table.cell(rowspan: staff-existing-research.len(), align: left, fill: defs.crc-style-defaults.table-subheader-fill, [Research staff]),) + staff-existing-research.map(it => (
+          table.cell(rowspan: staff-existing-research.len(), align: left, fill: defs.table-style-defaults.table-subheader-fill, [Research staff]),) + staff-existing-research.map(it => (
           [#it.at(0).],
           [#if it.at(1).name in persons.keys() [
             #persons.at(it.at(1).name).name#if persons.at(it.at(1).name).title != none [, #persons.at(it.at(1).name).title]#if persons.at(it.at(1).name).position != none [ (#positionspi.at(persons.at(it.at(1).name).position))]
@@ -1430,7 +1430,7 @@
     // add non-research staff content
     if staff-existing-nonresearch != () {
       body-existing = body-existing + (
-          table.cell(rowspan: staff-existing-nonresearch.len(), align: left, fill: defs.crc-style-defaults.table-subheader-fill, [Non-research staff]),) + staff-existing-nonresearch.map(it => (
+          table.cell(rowspan: staff-existing-nonresearch.len(), align: left, fill: defs.table-style-defaults.table-subheader-fill, [Non-research staff]),) + staff-existing-nonresearch.map(it => (
           [#it.at(0).],
           [#if it.at(1).name in persons.keys() [
             #persons.at(it.at(1).name).name#if persons.at(it.at(1).name).title != none [, #persons.at(it.at(1).name).title]#if persons.at(it.at(1).name).position != none [ (#positionspi.at(persons.at(it.at(1).name).position))]
@@ -1454,14 +1454,14 @@
     // only add sub-header if there is requested staff
     if staff-requested-research + staff-requested-nonresearch != () {
       body-requested = (
-          table.cell(colspan: 8, align: left, fill: defs.crc-style-defaults.table-subheader-fill, if status == "E" [*Staff funded with approved grant money*] else [*Requested Staff*]),
+          table.cell(colspan: 8, align: left, fill: defs.table-style-defaults.table-subheader-fill, if status == "E" [*Staff funded with approved grant money*] else [*Requested Staff*]),
       )
     }
 
     // add research staff content
     if staff-requested-research != () {
       body-requested = body-requested + (
-        table.cell(rowspan: staff-requested-research.len(), align: left, fill: defs.crc-style-defaults.table-subheader-fill, [Research staff]),) + staff-requested-research.map(it => (
+        table.cell(rowspan: staff-requested-research.len(), align: left, fill: defs.table-style-defaults.table-subheader-fill, [Research staff]),) + staff-requested-research.map(it => (
           [#it.at(0).], // numbering
           [#if it.at(1).name in persons.keys() [
             #persons.at(it.at(1).name).name#if persons.at(it.at(1).name).title != none [, #persons.at(it.at(1).name).title]#if persons.at(it.at(1).name).position != none [ (#positionspi.at(persons.at(it.at(1).name).position))]
@@ -1480,7 +1480,7 @@
     // add non-research staff content
     if staff-requested-nonresearch != () {
       body-requested = body-requested + (
-          table.cell(rowspan: staff-requested-nonresearch.len(), align: left, fill: defs.crc-style-defaults.table-subheader-fill, [Non-research staff]),) + staff-requested-nonresearch.map(it => (
+          table.cell(rowspan: staff-requested-nonresearch.len(), align: left, fill: defs.table-style-defaults.table-subheader-fill, [Non-research staff]),) + staff-requested-nonresearch.map(it => (
           [#it.at(0).],
           [#if it.at(1).name in persons.keys() [
             #persons.at(it.at(1).name).name#if persons.at(it.at(1).name).title != none [, #persons.at(it.at(1).name).title]#if persons.at(it.at(1).name).position != none [ (#positionspi.at(persons.at(it.at(1).name).position))]
@@ -1526,9 +1526,9 @@
       ),
       fill:  (col, row) => if row == 0 { 
         // first line of header is always filled
-        defs.crc-style-defaults.table-header-fill 
+        defs.table-style-defaults.table-header-fill 
       } else if col == 0 or row in fills {
-        defs.crc-style-defaults.table-subheader-fill
+        defs.table-style-defaults.table-subheader-fill
       }        
       else { 
         // let first row of (sub-)body always be white, then alternate
@@ -1540,7 +1540,7 @@
           }
         }
         if not calc.odd(row - catindex) {
-          defs.crc-style-defaults.table-row-fill  
+          defs.table-style-defaults.table-row-fill  
         }          
       },
       columns: (.9fr, .2fr) + (1fr,) * 6,
@@ -1553,12 +1553,12 @@
         [*Project commitm.\ (h/wk)*], 
         [*Category*], 
         [*Funding source*], 
-        table.hline(start: 0, end: 8, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint))        
+        table.hline(start: 0, end: 8, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint))        
       ),
       ..body-existing,
-      table.hline(start: 0, end: 8, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+      table.hline(start: 0, end: 8, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
       ..body-requested,
-      table.hline(start: 0, end: 8, stroke: (thickness: defs.crc-style-defaults.table-stroke-thick, paint: defs.crc-style-defaults.table-stroke-paint))
+      table.hline(start: 0, end: 8, stroke: (thickness: defs.table-style-defaults.table-stroke-thick, paint: defs.table-style-defaults.table-stroke-paint))
     )
 
     // add job descriptions for existing staff
@@ -1628,9 +1628,9 @@
     )).map(it => it.sum())
 
     let tablebody = ((
-      table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [Sum of existing funds]), (if totals == () { (0,)*num-years } else { totals }).map(t => (table.cell(fill: none, [#num-or-zero(t)]),)) 
+      table.cell(fill: defs.table-style-defaults.table-subheader-fill, [Sum of existing funds]), (if totals == () { (0,)*num-years } else { totals }).map(t => (table.cell(fill: none, [#num-or-zero(t)]),)) 
     ) + (
-      table.cell(fill: defs.crc-style-defaults.table-subheader-fill, [Sum of requested funds]), (if funds-requested-transposed == () { (0,)*num-years } else { funds-requested-transposed }).map(t => (table.cell(fill: none, [#num-or-zero(t)]),)) 
+      table.cell(fill: defs.table-style-defaults.table-subheader-fill, [Sum of requested funds]), (if funds-requested-transposed == () { (0,)*num-years } else { funds-requested-transposed }).map(t => (table.cell(fill: none, [#num-or-zero(t)]),)) 
     )).flatten()
 
     let numrows = funds-existing-main.len() + funds-existing-other.len() + 2
@@ -1645,12 +1645,12 @@
       table.header(
         [], 
         ..s-crc-data.get().crc.funding-years.map(year => [*#year*]),
-        table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+        table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
       ),
       ..tablebody-existing-main,
-      table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+      table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
       ..tablebody-existing-other,
-      table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.crc-style-defaults.table-stroke-thin, paint: defs.crc-style-defaults.table-stroke-paint)),
+      table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
       ..tablebody,
       table.footer(
           table.cell(
