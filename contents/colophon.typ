@@ -20,7 +20,7 @@
   Copyediting by Mareike Picklum #orcid("0000-0003-2588-5119").\
   This template is based on the \LaTeX-template for a CRC proposal by Lukas C.~Bossert #orcid("0000-0003-3076-3968"), which is published under the MIT-licence: #smallcaps([DOI:])  #link("https://doi.org/10.18154/RWTH-2022-10554}{10.18154/RWTH-2022-10554").
 
-  The #typst code for this document by Mareike Picklum #orcid("0000-0003-2588-5119") is published under the MIT-license: #link("https://gitlab.informatik.uni-bremen.de/aicor/typst-packages").
+  The #typst code for this document by Mareike Picklum #orcid("0000-0003-2588-5119") is published under the MIT-license: #link("https://github.com/mareikep/typst-crc").
 
 ]
 
