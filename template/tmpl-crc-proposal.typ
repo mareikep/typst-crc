@@ -653,8 +653,7 @@
     projects: none,
     projectcolors: none,
     funding: none,
-    aux: none,
-    style-defaults: none
+    aux: none
   ) = {
   	
     let proposal = crc-proposal.with(
