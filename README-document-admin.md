@@ -7,7 +7,7 @@ File structure
 ===
 
 ```bash
-crc-2025/
+typst-crc/
 ├─ bib/                         # bibliography files for the main project and the subprojects
 │  ├─ <project1-id>.bib
 │  ├─ <project2-id>.bib
