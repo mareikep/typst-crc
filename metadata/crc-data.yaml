@@ -1,0 +1,21 @@
+crc: 
+  number: 1234
+  name-full: My Fancy Project Title
+  name: MFPT
+  funded-since: 2017-01-01
+  funding-years-previous: 
+    - 2021|2
+    - 2022
+    - 2023
+    - 2024
+    - 2025
+  funding-years: 
+    - 2026
+    - 2027
+    - 2028
+    - 2029|1
+  funding-period: 3
+  current-targeted-female-PIpostDoc-percentage: 66
+  current-targeted-female-PIresearchGroupLeader-percentage: 40
+  current-targeted-female-PIprof-W2-percentage: 0
+  current-targeted-female-PIprof-W3-percentage: 8
