@@ -29,12 +29,8 @@ typst-crc/
 │  ├─ colophon.typ                # colophon containing license information about the document template and contents
 ├─ img/                           # the directory to put image and graphics files
 ├─ metadata/                      # the metadata files read by the document to fill tables and other parts of the document
-│  ├─ crc-aux.yaml                # see "Metadata => aux"
-│  ├─ crc-data.yaml               # see "Metadata => data"
+│  ├─ crc-<type>.yaml             # see "Metadata => {aux,data,funding,persons,projects}", will only appear after calling `make prepare`
 │  ├─ crc-metadata.xlsx           # the .xlsx file to be filled beforehand, see "Metadata => Spreadsheet"
-│  ├─ crc-funding.yaml            # see "Metadata => funding"
-│  ├─ crc-persons.yaml            # see "Metadata => persons"
-│  ├─ crc-projects.yaml           # see "Metadata => projects"
 ├─ project-templates/             # contains project template files for each project type and status: 
 │  ├─ <project-type>-<status>.typ #   project-type: {inf, mgk, research, transfer, wiko, z}
 │  ├─ ...                         #   status: {C (cont'd), E (ending), N (new)}
@@ -53,7 +49,9 @@ typst-crc/
 ├─ Makefile                       # the main executive for the setup and compilation of the document, see "Document setup"
 ├─ read-metadata.py               # a python script to extract metadata from the .xlsx document into YAML files
 ├─ README.md                      # this document
-├─ typst                          # an executable binary file to run Typst for document compilation
+├─ typst-linux                    # an executable binary file to run Typst for document compilation on linux-based OS
+├─ typst-darwin                   # an executable binary file to run Typst for document compilation on Darwin (MAC) OS
+├─ typst.exe                      # an executable binary file to run Typst for document compilation on Windows OS
 ```
 
 Document setup
