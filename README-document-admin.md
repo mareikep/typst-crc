@@ -31,6 +31,7 @@ typst-crc/
 ├─ metadata/                      # the metadata files read by the document to fill tables and other parts of the document
 │  ├─ crc-<type>.yaml             # see "Metadata => {aux,data,funding,persons,projects}", will only appear after calling `make prepare`
 │  ├─ crc-metadata.xlsx           # the .xlsx file to be filled beforehand, see "Metadata => Spreadsheet"
+│  ├─ read-metadata.py            # a python script to extract metadata from the .xlsx document into YAML files
 ├─ project-templates/             # contains project template files for each project type and status: 
 │  ├─ <project-type>-<status>.typ #   project-type: {inf, mgk, research, transfer, wiko, z}
 │  ├─ ...                         #   status: {C (cont'd), E (ending), N (new)}
@@ -47,7 +48,6 @@ typst-crc/
 ├─ crc-2025.typ                   # the main document which calls the main template and includes the other content files
 ├─ crc-imports.typ                # the document's imports and proposal setup, see "Imports"
 ├─ Makefile                       # the main executive for the setup and compilation of the document, see "Document setup"
-├─ read-metadata.py               # a python script to extract metadata from the .xlsx document into YAML files
 ├─ README.md                      # this document
 ├─ typst-linux                    # an executable binary file to run Typst for document compilation on linux-based OS
 ├─ typst-darwin                   # an executable binary file to run Typst for document compilation on Darwin (MAC) OS
