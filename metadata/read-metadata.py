@@ -1,10 +1,15 @@
 import openpyxl
 import yaml
+import os
+import sys
+
+# absolute path to the directory of this script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 mytab = "\t"
 myenter = "\n"
 both = "\n  "
-fname = "metadata/crc-metadata.xlsx"
+fname = os.path.join(SCRIPT_DIR, "crc-metadata.xlsx")
 
 data = None
 projects = None
@@ -23,36 +28,36 @@ except Exception as err:
 finally:
 
     if data is not None:
-        print(f"Writing general CRC metadata...")
-        with open("metadata/crc-data.yaml", "w", encoding='utf-8') as f_data:
+        print(f"\tWriting general CRC metadata...")
+        with open(os.path.join(SCRIPT_DIR, "crc-data.yaml"), "w", encoding='utf-8') as f_data:
             yaml.dump(data, f_data, allow_unicode=True)
     else:
         print(f"There is no general CRC metadata available.")
 
     if pis is not None:
-        print(f"Writing PI metadata...")
-        with open("metadata/crc-persons.yaml", "w", encoding='utf-8') as f_pis:
+        print(f"\tWriting person metadata...")
+        with open(os.path.join(SCRIPT_DIR, "crc-persons.yaml"), "w", encoding='utf-8') as f_pis:
             yaml.dump(pis, f_pis, allow_unicode=True)
     else:
         print(f"There is no PI metadata available.")
 
     if projects is not None:
-        print(f"Writing project metadata...")
-        with open("metadata/crc-projects.yaml", "w", encoding='utf-8') as f_projects:
+        print(f"\tWriting project metadata...")
+        with open(os.path.join(SCRIPT_DIR, "crc-projects.yaml"), "w", encoding='utf-8') as f_projects:
             yaml.dump(projects, f_projects, allow_unicode=True)
     else:
         print(f"There is no project metadata available.")
 
     if funding is not None:
-        print(f"Writing funding metadata...")
-        with open("metadata/crc-funding.yaml", "w", encoding='utf-8') as f_funding:
+        print(f"\tWriting funding metadata...")
+        with open(os.path.join(SCRIPT_DIR, "crc-funding.yaml"), "w", encoding='utf-8') as f_funding:
             yaml.dump(funding, f_funding, allow_unicode=True)
     else:
         print(f"There is no funding metadata available.")
 
     if aux is not None:
-        print(f"Writing aux metadata...")
-        with open("metadata/crc-aux.yaml", "w", encoding='utf-8') as f_aux:
+        print(f"\tWriting aux metadata...")
+        with open(os.path.join(SCRIPT_DIR, "crc-aux.yaml"), "w", encoding='utf-8') as f_aux:
             yaml.dump(aux, f_aux, allow_unicode=True)
     else:
         print(f"There is no aux metadata available.")
