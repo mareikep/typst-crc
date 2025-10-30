@@ -1,0 +1,314 @@
+/* _src/pages/devs.typ */
+#include "/_src/common/common.typ"
+#import "/_src/mod.typ": excerpt
+
+#html.h1([For Document Admins])
+
+//=============================================================================
+
+#html.h2([Introduction])
+
+This proposal template will generate a CRC proposal including all required (funding) tables with values taken from metadata files. Read this manual carefully for successful document compilation with Typst, a novel typesetting language alternative to LaTeX. If you don't have Typst installed, you can still compile the document since a `typst` executable binary is provided with this package.
+
+#html.h2([File structure])
+
+#excerpt.full("_assets/code/docstruct.md", sourceline: false, lang: "markdown")
+
+//=============================================================================
+
+#html.h2([Document setup])
+
+The document relies on a couple of metadata files to fill parts of the document such as the front page, the headers/footers and the (funding) tables. Collect the data for these files in the `crc-metadata.xlsx`, which can, for example, be shared with the proposal's contributors/PIs via Google Docs. Make sure to follow the instructions given by the DFG (see the hints in the spreadsheet file) carefully, to prevent erroneous data in the calculations. More information about the different sheets of the document can be found below.
+
+#html.h3([Spreadsheet])
+
+There are sheets that should only be edited by the admin, some that should be edited only by those who are in charge of the financial planning of the CRC and some that should be edited by contributors (such as project PIs or postdocs/phd's who are involved in the proposal writing). It is therefore advised to alter this document in 3 steps:
+
+1. the `admin` fills the `AUX` and `crcData` sheets to setup the overall value ranges for the remaining sheets. Hide these sheets afterwards to prevent unauthorized manipulations of these information.
+2. the `planner` fills sheets `overview`, `oeverviewBIG`, `staffRequestedAmount`, `staffOverviewRequested`, `staffOverviewExisting`, `directCostsOverviewExisting`, `earlyCareerGenderEquality`, and `genderEqualityStaff`. Hide certain sheets afterwards to prevent unauthorized manipulations of these information and confusion about what information to enter.
+3. the `contributors` only add information to the remaining sheets such as `PIs`, `projects` and project-related funding details. 
+
+Generally
+- do not touch the columns called `EXPORT` (typically grey background)
+- if there is an empty column A in front of a table, single rows can typically be ignored in the generation of the export commands by entering an `x`. This can be used when positions requested by the subprojects have to be cancelled for some reason without messing up the entire table.
+
+The functions and usage of the sheets are detailed in the following. For more information, refer to the respective application template for the continuation of a Collaborative Research Centre (here: [DFG Form 60.200 – 09/24](https://www.dfg.de/de/formulare-60-200-246904)). Guide the contributors in filling out the tables using the information below.
+
+#html.h4([`EXPORT`])
+
+The very first sheet `EXPORT` is the most important sheet for the metadata extraction. It collects all information from the remaining sheets and combines them into YAML-structured strings, that are then extracted and written to separate YAML files by the python script provided. 
+
+#underline[* What to edit *]
+
+nothing! Do not touch this sheet, unless you know exactly what you are doing!
+
+#html.h4([`AUX`])
+
+This is the very last sheet that should only be edited by the administrator (consider hiding this sheet when having filled all information and publishing the document to contributors).
+
+#underline[* What to edit *]
+
+- column A: the list of projects in this CRC
+- column C: the current personnel funding rates of the DFG (if necessary); currently based on the rates for [the year 2025](https://www.dfg.de/resource/blob/345094/31cd4b597ee7a1fc711a8f2566010783/60-12-2025-de-data.pdf).
+- columns L-N: the universities and their abbreviations as well as departments or institutes involved in the CRC
+- column R: the species of laboratory animals (if applicable)
+
+Caution! All other categories should be treated _very_ carefully, as they are created based on previous DFG CRC proposal guides and are used in several tables/parts of the document that are automatically generated. Make sure only update these values if you understand where/how they are used throughout the generation of the document. 
+
+#html.h4([`overview` and `overviewBIG`])
+
+These sheets show overviews of the overall costs of the CRC sorted by projects, funding years and type of costs (staff, direct costs, instrumentation, ...), respectively (consider hiding this sheet when having filled all information and publishing the document to contributors).
+
+#underline[* What to edit *]
+
+- the funding information for the previous funding period in sheet `overview` (the funding for the applying period is filled automatically!)
+- column B (project) in sheet `overviewBIG` -> the values for the remaining table are then filled automatically. Select each project exactly once in column B from the dropdown menu.
+
+#html.h4([`crcData`])
+
+Contains the general information about the CRC as for example printed on the front page of the document. 
+
+#underline[* What to edit *]
+
+- columns A-G: number, name, funding years of the CRC, ...
+- columns H-K: the targeted _percentage_ of female PIs in different positions (postdoc, group leader, etc)
+
+#html.h4([`PIs`])
+
+Contains the personal information about each _person_ relevant to this proposal. This also includes persons not directly involved in the writing of the document, such as the dean or rector of the applying university. 
+
+#underline[* What to edit *]
+
+- columns B-E: name of the PI, special role within the CRC (and optional: special role text. This is used e.g. for the dean and rector to be printed below the signature fields of the declarations), column A is generated automatically from column B. Only edit if necessary, e.g. if there are multiple persons with the same generated `id`. 
+- columns F-G: whether this person is a PI in the CRC or has a special status. The VIP status is typically true for everyone with a special role. 
+- columns H-T: mostly self-explanatory information about the PIs. The location/contact information refer to the institutional address/phone number. The university can only be selected from a dropdown, to ensure consistent spelling (data for this dropdown comes from `AUX` sheet). 
+- column U: select _all_ projects this PI is involved in from the multiple-choice dropdown.
+- column V: comma-separated list of numbers 1-3, indicating during which funding period(s) this PI was involved in the CRC.
+- columns W-Z: nationality/gender of the PI as well as their position and a position description (e.g. Head of Institute XY)
+- columns AA-AF: The questions as displayed in the "General information about Project" of each project, see the comments of the respective column.
+
+#html.h4([`projects`])
+
+Contains all information about the projects in the CRC.
+
+#underline[* What to edit *]
+
+- columns A-C: the id, number and name/title of the project.
+- column D: the status (C=continued, N=new, E=ending) of the project.
+- column E: the project type as specified by the DFG (research/service, infrastructure, MGK, WIKO, transfer, administrative); column F is filled automatically from sheet `PIs`. 
+- column G: the research areas this project is involved in (list of values of the dropdown generated from sheet research areas; see `researchareas`.)
+- columns H-R: questions concerning legal issues such as vertebraes and recombinant DNA being involved in experiments, see the comments of the respective column.
+
+#html.h4([`staffRequestedAmount`])
+
+Contains the funding requested from the DFG for staff for each project (per year).
+
+#underline[* What to edit *]
+
+- only fill columns C, D, G and H (I, K, M, O, Q are automatically copied from column G but can be altered if necessary)
+
+#html.h4([`staffOverviewRequested`])
+
+Contains an overview of the information entered in `staffRequestedAmount`. Do not touch the numbers, as they are automatically calculated.
+
+#underline[* What to edit *]
+
+- only column A: select each project exactly once to generate a complete overview over all projects
+
+#html.h4([`staffExistingRequestedDetails`])
+
+This table contains detailed information about the personnel in the CRC. Here, not only requested staff is listed, but also existing, which may be funded by other funding sources. These information play a role in different parts of the document, e.g. the funding for staff tables in the subprojects including the job descriptions.
+
+#underline[* What to edit *]
+
+- column A: projects may be selected multiple times here, each row corresponds to one person
+- column B: there are six categories to choose from: 
+  - ExistingResearchStaff: research staff that is working in one or more projects of the CRC but is not funded by this CRC
+  - ExistingNonResearchStaff: non-research staff that is working in one or more projects of the CRC but is not funded by this CRC
+  - RequestedResearchStaff: research staff that is planned to work in one or more projects of the CRC and whose funding by the DFG is requested in this proposal
+  - RequestedNonResearchStaff: non-research staff that is planned to work in one or more projects of the CRC and whose funding by the DFG is requested in this proposal
+  - ApprovedResearchStaff: research staff that worked in one or more projects of the CRC and was funded in the previous funding period (they will be listed in the staff tables in the ending projects)
+  - ApprovedNonResearchStaff: non-research staff that worked in one or more projects of the CRC and was funded in the previous funding period (they will be listed in the staff tables in the ending projects)
+- column C-H: the personal information of the staff; if this person is listed in the `PIs` sheet, simply enter the `id`, the rest will be filled automatically (in the document, not this sheet). If the name of the person for a requested position is not yet determined, use "N.N." as name and leave the `nameFirst` empty. 
+- columns I-L: the project commitment (h/wk), employment category of the person and its funding institution and source (where the person is funded from if not by the CRC, e.g. some scholarship X at University Y, only necessary for existing staff)
+- column M: the description of the work planned for this position (existing, requested)/what the person has worked on in the previous funding period (approved)
+
+#html.h4([`staffOverviewExisting`])
+
+Contains an overview of the _existing_ staff for each institution. Do not alter the numbers. 
+
+#underline[* What to edit *]
+
+- only the institutions in row 3. If more than 7 institutions are involved in the CRC, you will need to extend the table and make sure, that the formulas in column J are updated.
+
+#html.h4([`directCostsRequested`])
+
+Contains the requested direct costs for each project. Each position as required for the justification tables in the document corresponds to one line in this sheet, i.e. there _may_ be multiple lines for each project-category combination. 
+
+#underline[* What to edit *]
+
+- columns B-I: the requested funding per year for each position of each project-category combination. See the DFG hints for the allowed categories.
+
+#html.h4([`directCostsByInstitutions`])
+
+Contains information about _existing_ direct costs (either provided by the applicant institution or requested from partner institutions) along with their respective funding source.
+
+#underline[* What to edit *]
+
+- columns B-I: the existing funding provided by the `category` institution through some `source` for each year. 
+
+#html.h4([`directCostsOverviewExisting`])
+
+Contains an overview of the information entered in `directCostsByInstitutions` sorted by applicant/non-applicant institution.
+
+#underline[* What to edit *]
+
+- rows 4-8 in the green part of the table: the funding provided in the previous funding period. The funding for the applying period will be automatically extracted from sheet `directCostsByInstitutions`.
+
+#html.h4([`listExistingInstrumentation`])
+
+Contains information about equipment with a (gross) cost exceeding 10,000 euros that is available or planned to be procured by the start of the requested funding period as listed in "2.1.3 List of existing instrumentation" in the proposal.
+
+#underline[* What to edit *]
+
+- columns B-H: the project that uses this equipment, the number, type and vendor of the equipment as well as purchase information
+
+#html.h4([`instrumentation`, `globalfunds` and `fellowships`])
+
+Contain funding information about requested instrumentation, global funds and fellowships (the latter is only relevant for MGK).
+
+#underline[* What to edit *]
+
+- columns B-I: the positions requested. The descriptions will be shown in the respective justification tables of the projects, the positions will be collated according to the categories in the tables for "Requested funding". See the DFG hints for the allowed categories and additional information.
+
+#html.h4([`earlyCareerSupport`])
+
+Contains the information about early career support (as listed in the first talbe of "1.4.1 Researchers in early career phases") of the proposal. 
+
+#underline[* What to edit *]
+
+- columns A-G: the funding source and topic for the early career support of some person
+
+#html.h4([`earlyCareerGenderEquality`])
+
+Contains contract durations of all academic staff employed in the CRC (as listed in the second table of "1.4.1 Researchers in early career phases")
+
+#underline[* What to edit *]
+
+- columns B-E: the number of female and male PhD/PostDocs with the respective contract durations in column A
+
+#html.h4([`genderEqualityStaff`])
+
+Contains information about the "Objectives for the participation of female researchers" (table A in 1.4.2 Promotion of equity and diversity)
+
+#underline[* What to edit *]
+
+- columns B-E: the current targeted percentage of female PhD's and postdocs as well as the actual number of males and females, where "current" refers to the current situation, i.e. as resulting from the previous funding period, and the _next_ targeted female percentage (i.e. for the applying period)
+  
+#html.h4([`otherFundingSource`])
+
+Contains information about other funding sources of the PIs as listed in "1.6 Other sources of third-party funding for project leaders" of the proposal. 
+
+#underline[* What to edit *]
+
+- columns B-F: the `id` of he pi, the title of the project this PI is funded by and the periods and agency of the funding
+
+#html.h4([`upkeepLabAnimals`])
+
+Contains information about laboratory animals upkeep -- if applicable. 
+
+#underline[* What to edit *]
+
+- columns A-G: the project conducting experiments with animals, the involved species and their quantity and duration/costs
+
+#html.h4([`researchareas`])
+
+Contains DFG Classification of Scientific Disciplines, Research Areas, Review Boards and Subject Areas (2024-2028): https://www.dfg.de/resource/blob/331950/85717c3edb9ea8bd453d5110849865d3/fachsystematik-2024-2028-en-data.pdf.
+
+Contributors can look up their respective research areas here since the dropdown in the `projects` sheet only shows the number code. 
+
+#underline[* What to edit *]
+
+- Update table once the DFG releases new classifications
+
+#html.h3([Read metadata])
+
+Once the .xlsx file is fully filled, run the command 
+
+#excerpt.inline(`$ make prepare`, lang: "bash")
+
+to generate the YAML metadata files. These files are used heavily in the Typst functions of the document's template. 
+
+#html.h3([Update project files])
+
+!!! Generally, keep the document's file structure as is and only add/modify/delete files if you know what you are doing !!!
+
+For each subproject in your CRC, add a file in `crc-2025/contents/subprojects` named `03-<projectid>.typ`. Use the templates of the respective project type and status provided in `crc-2025/templates` to make sure they have the correct structure.
+If the subproject part of the document has (a) reference list(s), add a bibliography file in `crc-2025/bib` named `projectid>.bib`. Make sure that the `<projectid>` exists in the list of projects in the .xlsx file (and thus in the generated YAML files). 
+
+The bibliography file for the main part of the document is called `crc-2025/bib/main.bib`. 
+
+#html.h3([Compile])
+
+If necessary, make the `typst` binary executable by running 
+
+#excerpt.inline(`$ chmod +x ./typst`, lang: "bash")
+
+Once all the necessary files are created, try to compile the document by calling 
+
+#excerpt.inline(`$ make all`, lang: "bash")
+
+which will compile the document once and generate a PDF file called `crc-2025.pdf`. For continuing to work on the document and instantly seeing the document changes, run 
+
+#excerpt.inline(`$ make watch`, lang: "bash")
+
+which will incrementally compile the document whenever any of the project files change. 
+
+#html.h2([Main file])
+
+The main file `crc-2025.typ` initializes the entire template structure and includes the upper level files for the document. 
+In particular, it calls the templates for the title page and imports everything from the `crc-imports.typ` file, triggering the initialization of the overall proposal template. This is moved to the imports file to make the variables available to other files, too. 
+
+The main file includes
+    - the titlepage
+    - the colophon
+    - the titlepage addon (which is signed by the applying university's rector as well as the spokesperson of the crc)
+    - the content files of the main part
+    - the project details file, which itself includes the subprojects
+    - the formal contents as required by the DFG with 
+        - the bylaws
+        - the declaration on working space (signed by the person with role `dean`)
+        - the declaration on publication lists (signed by the person with role `spokesperson` and the person with role `rector` as provided by the metadata)
+
+
+#html.h2([Imports])
+
+The file `crc-2025/crc-imports.typ` contains all necessary package imports to compile this document at the time of shipping. If you want to use other packages in your subprojects, e.g. for drawing plots, import them here to appropriate the import to all document content files and avoid unnecessary and redundant imports.  
+
+The `crc-proposal-setup` call within this file is used to make the metadata available to project content files, that do not have access to the metadata states (i.e. the ones that are included _before_ showing the `crc-proposal` template).
+
+#html.h2([Metadata])
+
+Reading the spreadsheet metadata file, the `prepare` command generates 5 YAML files to structure the metadata. These files need to be passed to the proposal setup (`crc-proposal-setup` in `crc-imports.typ`), since they contain all the necessary information for filling the tables and other contents of the document. Internally, the information will be represented as typst `states`, and can therefore be accessed (and *ATTENTION*: _modified_) from anywhere* in the document. (*after the `show: proposal` call in the main document). Do *not* alter the data within these states during runtime, since this may cause undesired side effects and the calculations may not be valid anymore. 
+
+In the following, the purpose of the 5 generated YAML files will be described:
+
+#html.h3([crc-aux.yaml])
+
+The `auxiliary` metadata contains information about salaries of different positions as well as different kinds of categories one comes across in the document (such as project types, projects, genders, species, etc). There are also predefined questions that are printed in the general information part of each project and names (+ abbreviations) of universities and departments involved in the writing of this proposal. 
+
+#html.h3([crc-data.yaml])
+
+The `crc` metadata includes general information about the CRC such as its name, number, funding period ect. These information are used throughout the document, e.g. on the title page, several (funding) tables and so on.
+
+#html.h3([crc-funding.yaml])
+
+The `funding` metadata contains all information about existing and requested funding as entered in the spreadsheet. The funding information is used to calculate overall or project-specific funding and fill the respective tables accordingly. These tables are maintained carefully but may of course be subject to errors. Please make sure that all the numbers and information in the tables are correct before submitting!
+
+#html.h3([crc-persons.yaml])
+
+The `persons` metadata contains information about (mostly) the PIs of the project but also other persons with special roles, e.g. the rector of the university, the dean, etc. The information us used in the overview tables of the PIs, the general information of each project, the headers in the subproject parts and the signature parts of the declarations/addons. 
+
+#html.h3([crc-projects.yaml])
+
+Similarly to the `persons` metadata, the `projects` metadata contains all information about the subprojects, such as their id, title, assigned PIs, research areas and so on. 

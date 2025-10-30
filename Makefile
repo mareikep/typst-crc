@@ -65,9 +65,9 @@ ifeq ($(OS_TYPE),Windows)
   endif
 endif
 
-.PHONY: all watch cover prepare info compile
+.PHONY: all watch cover prepare info compile docs
 
-all: info prepare compile cover
+all: info prepare compile cover docs
 
 info:
 	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_GREEN) $(INFO_MSG)$(COLOR_RESET)\n"
@@ -96,3 +96,8 @@ prepare:
 
 debug-home:
 	@echo "HOME is: $(shell echo $$HOME)"
+
+docs:
+	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_BLUE) * building documentation... *$(COLOR_RESET)\n"
+	@just --justfile=doc/justfile compile
+	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_BLUE) * documentation built. Open $(COLOR_RESET)doc/index.html $(COLOR_BLUE)in browser. *$(COLOR_RESET)\n"

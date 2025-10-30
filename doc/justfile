@@ -1,0 +1,19 @@
+# justfile
+set quiet
+compile-raw SRC TGT:
+  typst compile --features html --format html --root . {{SRC}} {{TGT}}
+
+watch-raw SRC TGT:
+  typst watch --features html --format html --root . --no-serve {{SRC}} {{TGT}}
+
+compile-file BASE:
+  just compile-raw _src/pages/{{BASE}}.typ {{BASE}}.html
+
+watch-file BASE:
+  just watch-raw _src/pages/{{BASE}}.typ {{BASE}}.html
+
+compile:
+  ls _src/pages | cut -d. -f1 | parallel --lb just compile-file {}
+
+watch:
+  ls _src/pages | cut -d. -f1 | parallel --lb just watch-file {}

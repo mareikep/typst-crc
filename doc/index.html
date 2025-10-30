@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>typst-crc Docs</title>
+  </head>
+  <body>
+    <link rel="stylesheet" href="_assets/css/global.css">
+    <script src="_highlight/highlight.min.js">
+    </script>
+    <link rel="stylesheet" href="_highlight/styles/base16/gruvbox-dark-soft.css">
+    <script src="_highlight/highlight-typst.js">
+    </script>
+    <script src="data:application/javascript,  const run = window.$typst$parserModule.then(() => {
+    hljs.registerLanguage('typst', window.hljsTypst({}));
+    hljs.highlightAll();
+  });">
+    </script>
+    <script src="data:application/javascript,  document.addEventListener(%22DOMContentLoaded%22, () => {
+    const links = document.querySelectorAll(%22.nav-links ul li a%22);
+    const current = window.location.pathname.split(%22/%22).pop();
+    links.forEach(link => {
+      if (link.getAttribute(%22href%22) === %22./%22 + current) {
+        link.classList.add(%22active%22);
+      }
+    });
+  });">
+    </script>
+    <link rel="stylesheet" href="_assets/css/global.css">
+    <button class="theme-toggle">🌙 Dark Mode</button>
+    <script src="data:application/javascript,const toggleBtn = document.querySelector(%22.theme-toggle%22);
+const root = document.documentElement;
+
+// Restore saved theme
+if (localStorage.getItem(%22theme%22) === %22dark%22) {
+  root.setAttribute(%22data-theme%22, %22dark%22);
+  toggleBtn.textContent = %22☀️ Light Mode%22;
+}
+
+toggleBtn.addEventListener(%22click%22, () => {
+  if (root.getAttribute(%22data-theme%22) === %22dark%22) {
+    root.removeAttribute(%22data-theme%22);
+    localStorage.setItem(%22theme%22, %22light%22);
+    toggleBtn.textContent = %22🌙 Dark Mode%22;
+  } else {
+    root.setAttribute(%22data-theme%22, %22dark%22);
+    localStorage.setItem(%22theme%22, %22dark%22);
+    toggleBtn.textContent = %22☀️ Light Mode%22;
+  }
+});">
+    </script>
+    <style>
+      footer { position: fixed; bottom: 0; width: 100%; max-width: 1200px; }
+    </style>
+    <footer>
+      <div style="display: inline-flex; flex-direction: line; justify-content: center; align-items: center; flex-wrap: wrap; width: 900px; border-radius: 3pt; background-color: var(--nav-bg); padding: 1pt;">
+        <div style="display: inline-flex; flex-direction: line; justify-content: center; align-items: center; flex-wrap: wrap; padding-left: 14.173228346456693pt; padding-right: 14.173228346456693pt;"><span style="font-size: 10pt;">Last build: 2025-10-30</span></div>
+        <div style="display: inline-flex; flex-direction: line; justify-content: center; align-items: center; flex-wrap: wrap; padding-left: 14.173228346456693pt; padding-right: 14.173228346456693pt;"><span style="font-size: 10pt;">© Copyright 2025 <a href="mailto:mareikep@cs.uni-bremen.de">Mareike Picklum</a></span></div>
+        <div style="display: inline-flex; flex-direction: line; justify-content: center; align-items: center; flex-wrap: wrap; padding-left: 14.173228346456693pt; padding-right: 14.173228346456693pt;"><span style="font-size: 10pt;"><a href="https://github.com/mareikep/typst-crc"><img src="_assets/img/github.svg" width="20"></a></span></div>
+      </div>
+    </footer>
+    <nav class="navbar">
+      <p><a class="navbar-brand" href="./index.html">typst-crc</a></p>
+      <div class="nav-links">
+        <ul>
+          <li class="dropdown">
+            <p><a class="dropdown-toggle" href="./index.html">Readme ▾</a></p>
+            <ul class="dropdown-menu">
+              <li><a href="./users.html">For Contributors</a></li>
+              <li><a href="./devs.html">For Document Admins</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <h2>typst-crc</h2>
+    <h3>About</h3>
+    <p>This repository provides a template for the continuation of a Collaborative Research Centre (CRC) written in the modern typesetting language Typst.</p>
+    <h3>Release notes</h3>
+    <ul>
+      <li>
+        <p>Release 1.0.0 (August 2025)</p>
+        <ul>
+          <li><strong>Initial Release</strong></li>
+        </ul>
+      </li>
+    </ul>
+    <h3>Contents</h3>
+    <ul>
+      <li><a href="index.html">typst-crc [this document]</a></li>
+      <li><a href="users.html">For Contributors</a></li>
+      <li><a href="devs.html">For Document Admins</a></li>
+    </ul>
+    <h3>Credits</h3>
+    <h4>Lead Developer</h4>
+    <p>Mareike Picklum (<a href="mailto:mareikep@cs.uni-bremen.de">mareikep@cs.uni-bremen.de</a>)</p>
+    <h4>Acknowledgments</h4>
+    <p>This document has been generated using <code>Typst v0.14.0 (dd1e6e94)</code>.<br>Illustrations and figures by ChatGPT.<br>Copyediting by Mareike Picklum<span style="white-space: pre-wrap">&#x20;</span><a href="https://orcid.org/0000-0003-2588-5119"><span style="display: inline-block"><img src="_assets/img/orcid-logo.svg" height="15"></span> 0000-0003-2588-5119</a>.</p>
+    <p>This template is inspired by the LaTeX-template for a CRC proposal by Lukas C. Bossert<span style="white-space: pre-wrap">&#x20;</span><a href="https://orcid.org/0000-0003-3076-3968"><span style="display: inline-block"><img src="_assets/img/orcid-logo.svg" height="15"></span> 0000-0003-3076-3968</a>, which is published under the MIT-licence: <span style="font-variant-caps: small-caps">DOI:</span> <a href="https://doi.org/10.18154/RWTH-2022-10554">https://doi.org/10.18154/RWTH-2022-10554</a>.</p>
+    <p>The Typst code for this document by Mareike Picklum<span style="white-space: pre-wrap">&#x20;</span><a href="https://orcid.org/0000-0003-2588-5119"><span style="display: inline-block"><img src="_assets/img/orcid-logo.svg" height="15"></span> 0000-0003-2588-5119</a> is published under the MIT-license: <a href="https://github.com/mareikep/typst-crc">https://github.com/mareikep/typst-crc</a>.</p>
+  </body>
+</html>
