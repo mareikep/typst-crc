@@ -24,7 +24,8 @@ jobs:
           sudo snap install just --classic
           sudo snap install typst
           sudo apt-get update
-          sudo apt-get install -y build-essential python3-dev
+          sudo apt-get install -y build-essential python3-dev ttf-mscorefonts-installer
+          sudo fc-cache -f
           pip install --upgrade pip openpyxl
 
       - name: Build the proposal
