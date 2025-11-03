@@ -30,12 +30,12 @@ jobs:
       - name: Build the proposal
         run: |
           cd $GITHUB_WORKSPACE 
-          make prepare && make compile
+          just compile
 
       - name: Build the book
         run: |
           cd $GITHUB_WORKSPACE 
-          make docs
+          just docs
 
       # Upload the book's HTML as an artifact
       - name: Upload artifact
