@@ -1,10 +1,65 @@
+set shell := ["bash", "-cu"]
+
+# Variables
+project := "crc-2025"
+proposal := project
+cover := project + "-cover"
+
+# Colors (generated safely using printf)
+esc := `printf '\033'`
+color-reset := esc + "[0m"
+color-red := esc + "[1;31m"
+color-green := esc + "[1;32m"
+color-yellow := esc + "[1;33m"
+color-blue := esc + "[1;34m"
+color-magenta := esc + "[1;35m"
+color-cyan := esc + "[0;36m"
+color-white := esc + "[1;37m"
+
+# OS detection
+uname_s := `uname -s`
+os_env := `echo "${OS:-}"`  # empty if unset
+
+os_type := if os_env == "Windows_NT" {
+  "Windows"
+} else if uname_s == "Darwin" {
+  "macOS"
+} else if uname_s == "Linux" {
+  "Linux"
+} else {
+  "Unknown"
+}
+
+# Fallback typst executables
+fallback_typst := if os_type == "Windows" {
+  "./typst.exe"
+} else if os_type == "macOS" {
+  "./typst-darwin"
+} else if os_type == "Linux" {
+  "./typst-linux"
+} else {
+  "typst"
+}
+
+# Check for global typst
+global_typst := `command -v typst 2>/dev/null || echo ""`
+typst := if global_typst == "" { fallback_typst } else { "typst" }
+
+# Typst version message
+typst_version := `typst --version 2>/dev/null || echo "unknown version"`
+info_msg := if global_typst == "" {
+  "* using executable for " + color-white + os_type + color-reset + ": " + typst + color-green + " *"
+} else {
+  "* using installed typst version " + color-reset + " " + typst_version + color-green + " *"
+}
+
 # justfile
 set quiet
 compile-raw SRC TGT:
-  typst compile --features html --format html --root . {{SRC}} {{TGT}}
+  @{{typst}} compile --features html --format html --root . {{SRC}} {{TGT}}
 
 watch-raw SRC TGT:
-  typst watch --features html --format html --root . --no-serve {{SRC}} {{TGT}}
+  @{{typst}} watch --features html --format html --root . --no-serve {{SRC}} {{TGT}}
 
 compile-file BASE:
   just compile-raw _src/pages/{{BASE}}.typ {{BASE}}.html
