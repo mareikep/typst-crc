@@ -21,7 +21,8 @@ jobs:
 
       - name: Install system dependencies
         run: |
-          sudo snap install typst just --classic
+          sudo snap install just --classic
+          sudo snap install typst
           sudo apt-get update
           sudo apt-get install -y build-essential python3-dev
           pip install --upgrade pip openpyxl
