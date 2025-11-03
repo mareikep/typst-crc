@@ -1,8 +1,3 @@
-# Detect OS
-PROJECT  = crc-2025
-PROPOSAL = $(PROJECT)
-COVER    = $(PROJECT)-cover
-
 # Colors using escape character
 ESC := $(shell printf '\033')
 COLOR_RESET  := $(ESC)[0m
@@ -14,6 +9,7 @@ COLOR_MAGENTA = \033[1;35m
 COLOR_CYAN    = \033[0;36m
 COLOR_WHITE   = \033[1;37m
 
+# Detect OS
 UNAME_S := $(shell uname -s)
 
 ifeq ($(OS),Windows_NT)
@@ -65,39 +61,30 @@ ifeq ($(OS_TYPE),Windows)
   endif
 endif
 
-.PHONY: all watch cover prepare info compile docs
+compile-raw:
+	# Usage: make compile-raw SRC=_src/pages/foo.typ TGT=foo.html
+	@$(TYPST) compile --features html --format html --root . $(SRC) $(TGT)
 
-all: info prepare compile cover docs
+watch-raw:
+	# Usage: make watch-raw SRC=_src/pages/foo.typ TGT=foo.html
+	@$(TYPST) watch --features html --format html --root . --no-serve $(SRC) $(TGT)
 
-info:
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_GREEN) $(INFO_MSG)$(COLOR_RESET)\n"
+# ----------------
+# Compile/watch single file
+# ----------------
+compile-file:
+	# Usage: make compile-file BASE=foo
+	$(MAKE) compile-raw SRC=_src/pages/$(BASE).typ TGT=$(BASE).html
+
+watch-file:
+	# Usage: make watch-file BASE=foo
+	$(MAKE) watch-raw SRC=_src/pages/$(BASE).typ TGT=$(BASE).html
+
+# ----------------
+# Compile/watch all pages in parallel
+# ----------------
+compile:
+	@ls _src/pages | cut -d. -f1 | xargs -n1 -P4 -I{} $(MAKE) compile-file BASE={}
 
 watch:
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_MAGENTA) * watching proposal... *$(COLOR_RESET)\n"
-	@$(TYPST) watch $(PROPOSAL).typ
-
-compile:
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_RED) * single compiling proposal... *$(COLOR_RESET)\n"
-	@$(TYPST) compile $(PROPOSAL).typ
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_RED) * proposal compiled *$(COLOR_RESET)\n"
-
-cover:
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_BLUE) * compiling double cover page... *$(COLOR_RESET)\n"
-	@$(TYPST) compile --ppi 600 --format svg $(COVER).typ
-	@$(TYPST) compile --ppi 600 --format png $(COVER).typ
-	@$(TYPST) compile --ppi 600 --format pdf $(COVER).typ
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_BLUE) * double cover page compiled to output files $(COLOR_RESET)$(COVER).svg, $(COVER).png and $(COVER).pdf $(COLOR_BLUE)*$(COLOR_RESET)\n"
-
-prepare:
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_YELLOW) * preparing document setup... *$(COLOR_RESET)\n"
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_YELLOW) * using python interpreter: $(COLOR_RESET)$(PYTHON)$(COLOR_YELLOW) *$(COLOR_RESET)\n"
-	@time $(PYTHON) metadata/read-metadata.py
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_YELLOW) * preparation complete *$(COLOR_RESET)\n"
-
-debug-home:
-	@echo "HOME is: $(shell echo $$HOME)"
-
-docs:
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_BLUE) * building documentation... *$(COLOR_RESET)\n"
-	@make --directory=doc compile
-	@printf "$(COLOR_CYAN)<$(PROJECT)>$(COLOR_BLUE) * documentation built. Open $(COLOR_RESET)doc/index.html $(COLOR_BLUE)in browser. *$(COLOR_RESET)\n"
+	@ls _src/pages | cut -d. -f1 | xargs -n1 -P4 -I{} $(MAKE) watch-file BASE={}
