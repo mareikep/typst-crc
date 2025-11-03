@@ -1,7 +1,29 @@
 /* ================================
-   Light theme (default)
+   Dark theme (default)
    ================================ */
 :root {
+  --bg: #181818;
+  --fg: #f5f5f5;
+  --heading1: #5c80bc;
+  --heading2: #6f8fc5;
+  --heading3: #8ab4f8;
+  --heading4: #b2cfff;
+  --border: #555555;
+  --nav-bg: #1f1f1f;
+  --nav-link: #cccccc;
+  --nav-link-hover: #8ab4f8;
+  --nav-link-active: #8ab4f8;
+  --accent: #8ab4f8;
+  --accent-hover: #5c80bc;
+  --accent-visited: #bb86fc;
+  --dk-blue: #5c80bc;
+  --bg-box: #313131;
+}
+
+/* ================================
+   Light theme
+   ================================ */
+:root[data-theme="light"] {
   --bg: #f8f9fa;         /* body background */
   --fg: #212529;         /* body text */
   --heading: #000000;    /* headings */
@@ -19,28 +41,6 @@
   --accent-visited: #5c80bc;
   --dk-blue: #5c80bc;
   --bg-box: #dadbdb;
-}
-
-/* ================================
-   Dark theme
-   ================================ */
-:root[data-theme="dark"] {
-  --bg: #181818;
-  --fg: #f5f5f5;
-  --heading1: #5c80bc;
-  --heading2: #6f8fc5;
-  --heading3: #8ab4f8;
-  --heading4: #b2cfff;
-  --border: #555555;
-  --nav-bg: #1f1f1f;
-  --nav-link: #cccccc;
-  --nav-link-hover: #8ab4f8;
-  --nav-link-active: #8ab4f8;
-  --accent: #8ab4f8;
-  --accent-hover: #5c80bc;
-  --accent-visited: #bb86fc;
-  --dk-blue: #5c80bc;
-  --bg-box: #313131;
 }
 
 /* ================================
