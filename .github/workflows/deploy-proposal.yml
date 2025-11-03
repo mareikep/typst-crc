@@ -1,4 +1,4 @@
-name: deploy-book
+name: deploy-proposal
 
 # Run this when the master or main branch changes
 on:
@@ -26,6 +26,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential python3-dev ttf-mscorefonts-installer
           sudo fc-cache -f
+          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+          sudo apt-get install -y ttf-mscorefonts-installer --reinstall
           pip install --upgrade pip openpyxl
 
       - name: Build the proposal
@@ -47,6 +49,6 @@ jobs:
           path: doc
 
       # Deploy the book's HTML to GitHub Pages
-      - name: Deploy to GitHub Pages
+      - name: Deploy generated files to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
