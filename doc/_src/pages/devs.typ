@@ -237,6 +237,10 @@ Once the .xlsx file is fully filled, run the command
 
 #excerpt.inline(`$ make prepare`, lang: "bash")
 
+OR, if you prefer `just`, 
+
+#excerpt.inline(`$ just prepare`, lang: "bash")
+
 to generate the YAML metadata files. These files are used heavily in the Typst functions of the document's template. 
 
 #html.h3([Update project files])
@@ -252,15 +256,23 @@ The bibliography file for the main part of the document is called `crc-2025/bib/
 
 If necessary, make the `typst` binary executable by running 
 
-#excerpt.inline(`$ chmod +x ./typst`, lang: "bash")
+#excerpt.inline(`$ chmod +x ./typst<os>`, lang: "bash")
 
 Once all the necessary files are created, try to compile the document by calling 
 
 #excerpt.inline(`$ make all`, lang: "bash")
 
+OR
+
+#excerpt.inline(`$ just all`, lang: "bash")
+
 which will compile the document once and generate a PDF file called `crc-2025.pdf`. For continuing to work on the document and instantly seeing the document changes, run 
 
 #excerpt.inline(`$ make watch`, lang: "bash")
+
+OR 
+
+#excerpt.inline(`$ just watch`, lang: "bash")
 
 which will incrementally compile the document whenever any of the project files change. 
 

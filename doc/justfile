@@ -1,10 +1,5 @@
 set shell := ["bash", "-cu"]
 
-# Variables
-project := "crc-2025"
-proposal := project
-cover := project + "-cover"
-
 # Colors (generated safely using printf)
 esc := `printf '\033'`
 color-reset := esc + "[0m"
