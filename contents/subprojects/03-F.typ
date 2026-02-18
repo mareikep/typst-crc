@@ -2,7 +2,7 @@
 
 == Project progress to date
 
-@bib-f-uhde2020robot
+@f:uhde2020robot
 #lorem(50)
 
 === Report and current state of research
@@ -11,7 +11,7 @@
 
 === Project- and subject-related list of publications <project-publications>
 
-// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `bib-f-` will be listed here.
+// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `<projectnumber>:` will be listed here.
 
 == Project plan
 

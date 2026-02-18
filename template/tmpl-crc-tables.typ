@@ -70,17 +70,21 @@
 
 #let general-overview-project-leaders() = context {
   // 1.1.2 Project Leaders
+  
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
 
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("person"), message: "There is no person data available for the table 1.1.2 Project Leaders")
+    assert("person" in metadata.value, message: "There is no person data available for the table 1.1.2 Project Leaders")
   }
 
-  if not s-crc-data.get().keys().contains("person") {
+  if not "person" in metadata.value {
     return table-missing-msg
   }
-
-  let pis = s-crc-data.get().person.keys().filter(pid => s-crc-data.get().person.at(pid).pi)
-  let person = s-crc-data.get().person
+  
+  let person = metadata.value.person
+  let pis = person.keys().filter(pid => person.at(pid).pi)
 
   // generate table data
   let tablebody = pis.map(pid => ([*#person.at(pid).name*#label("pi-" + pid), #person.at(pid).name-first\ #if person.at(pid).title != none { person.at(pid).title }#if person.at(pid).titlesuffix != none { person.at(pid).titlesuffix }], person.at(pid).gender.at(0), [#person.at(pid).yearDoctorate], [#person.at(pid).institute,\ #person.at(pid).university], person.at(pid).projects.map(proj => project(proj)).join([, ]))).flatten()
@@ -121,16 +125,20 @@
 #let general-participating-institutions() = context {
   // 1.1.3 Participating institutions
 
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+  
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("person"), message: "There is no data available for the table 1.1.3 Participating institutions")
+    assert("person" in metadata.value and "aux" in metadata.value, message: "There is no data available for the table 1.1.3 Participating institutions")
   }
 
-  if not s-crc-data.get().keys().contains("person") {
+  if not "person" in metadata.value {
     return table-missing-msg
   }
 
-  let person-db = s-crc-data.get().person
-  let aux-db-unis = s-crc-data.get().aux.universities
+  let person-db = metadata.value.person
+  let aux-db-unis = metadata.value.aux.universities
 
   // get all the universities from the persons database, but only from the PIs
   let universities = person-db.keys().fold((), (a, b) => a + if person-db.at(b).pi and person-db.at(b).keys().contains("university") { (person-db.at(b).university, ) }).dedup().sorted()
@@ -157,16 +165,20 @@
 #let general-overview-projects-groups() = context {
   // 1.1.4 Project groups and projects
 
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+  
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("project"), message: "There is no project data available for the table 1.1.4 Project groups and projects")
+    assert("project" in metadata.value, message: "There is no project data available for the table 1.1.4 Project groups and projects")
   }
 
-  if not s-crc-data.get().keys().contains("project") {
+  if not "project" in metadata.value {
     return table-missing-msg
   }
 
-  let project-db = s-crc-data.get().project
-  let person-db = s-crc-data.get().person
+  let project-db = metadata.value.project
+  let person-db = metadata.value.person
   let research = project-db.keys().filter(proj => project-db.at(proj).type in ("research", "transfer"))
   let project-areas = research.map(rp => rp.at(0)).dedup()
   let others = project-db.keys().filter(proj => project-db.at(proj).type not in ("research", "transfer"))
@@ -238,15 +250,20 @@
 #let general-early-career-phases() = context {
   // 1.4.1 Researchers in early career phases
 
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().at("funding", default: (:)).at("earlyCareerSupport", default: none) != none, message: "There is no data available for the table 1.4.1 Researchers in early career phases")
+    assert("funding" in metadata.value and metadata.value.funding.at("earlyCareerSupport", default: none) != none, message: "There is no data available for the table 1.4.1 Researchers in early career phases")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().at("funding", default: (:)).at("earlyCareerSupport", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("earlyCareerSupport", default: none) == none {
     return table-missing-msg
   }
 
-  let funds-earlycareer = s-crc-data.get().funding.earlyCareerSupport
+  let funding = metadata.value.funding
+  let funds-earlycareer = funding.earlyCareerSupport
   let tablebody = funds-earlycareer.map(it => (project(it.project), [#it.name, #it.nameFirst], it.fundingSource, it.topic, [#it.periodStart - #it.periodEnd])).flatten()
 
   let numrows = calc.ceil(tablebody.len() / 5)
@@ -265,7 +282,7 @@
     ..tablebody,
   )
 
-  let funds-equality = s-crc-data.get().funding.earlyCareerGenderEquality
+  let funds-equality = funding.earlyCareerGenderEquality
   let tablebody = funds-equality.map(it => (
     [Up to #it.duration months], 
     [#it.PhD-male], 
@@ -310,16 +327,21 @@
 
 #let general-objectives-female-researchers() = context {
   // 1.4.2 Objectives for the participation of female researchers
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
   
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().at("funding", default: (:)).at("genderEqualityStaff", default: none) != none, message: "There is no data available for the table 1.4.2 Objectives for the participation of female researchers")
+    assert("funding" in metadata.value and metadata.value.funding.at("genderEqualityStaff", default: none) != none, message: "There is no data available for the table 1.4.2 Objectives for the participation of female researchers")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().at("funding", default: (:)).at("genderEqualityStaff", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("genderEqualityStaff", default: none) == none {
     return table-missing-msg
   }
 
-  let funds = s-crc-data.get().funding.genderEqualityStaff
+  let funding = metadata.value.funding
+  let funds = funding.genderEqualityStaff
   let tablebody = funds.map(it => (
     [#it.position], 
     [#it.at("current-targeted-female-percentage")], 
@@ -369,16 +391,22 @@
 
 #let general-objectives-female-leaders() = context {
   // 1.4.2 Objectives for the participation of female project leaders
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+  
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("person"), message: "There is no data available for the table1.4.2 Objectives for the participation of female project leaders")
+    assert("person" in metadata.value and "crc" in metadata.value, message: "There is no data available for the table1.4.2 Objectives for the participation of female project leaders")
   }
 
-  if not s-crc-data.get().keys().contains("person") {
+  if not "person" in metadata.value or not "crc" in metadata.value {
     return table-missing-msg
   }
 
-  let crcdata = s-crc-data.get().crc // this is where the objectives for female researchers for the current (=ending) period can be found
-  let pis = s-crc-data.get().person.keys().filter(pid => s-crc-data.get().person.at(pid).pi).map(it => s-crc-data.get().person.at(it))
+  let person = metadata.value.person
+  let crcdata = metadata.value.crc // this is where the objectives for female researchers for the current (=ending) period can be found
+  let pis = person.keys().filter(pid => person.at(pid).pi).map(it => person.at(it))
 
   // current absolute
   let femalePostDocCurrent = pis.filter(pi => pi.gender == "female" and 2 in pi.periods and pi.position == "postDoc").len()
@@ -531,17 +559,23 @@
 
 #let general-other-sources-funding-leaders() = context {
   // 1.6 Other sources of third-party funding for project leaders
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("otherFundingSource", default: none) != none, message: "There is no data available for the table 1.6 Other sources of third-party funding for project leaders")
+    assert("funding" in metadata.value and metadata.value.funding.at("otherFundingSource", default: none) != none, message: "There is no data available for the table 1.6 Other sources of third-party funding for project leaders")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("otherFundingSource", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("otherFundingSource", default: none) == none {
     return table-missing-msg
   }
 
-  let funds = s-crc-data.get().funding.otherFundingSource
-  let person = s-crc-data.get().person
+  let funding = metadata.value.funding
+  let person = metadata.value.person
+  let funds = funding.otherFundingSource
+  let person = person
   let tablebody = funds.map(it => ([#pi(it.nameID), #person.at(it.nameID).name-first], [#projects(person.at(it.nameID).projects.map(lower), last: [, ])], [#it.projectTitle], [#it.periodStart - #it.periodEnd], [#it.fundingAgency])).flatten()
 
   let numrows = calc.ceil(tablebody.len() / 5)
@@ -563,17 +597,21 @@
 
 #let funds-overview-existing-direct-costs() = context {
   // 2.1.1 Overview of existing funds for direct costs
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("directCostsOverviewExisting", default: none) != none, message: "There is no data available for the table 2.1.1 Overview of existing funds for direct costs")
+    assert("funding" in metadata.value and metadata.value.funding.at("directCostsOverviewExisting", default: none) != none, message: "There is no data available for the table 2.1.1 Overview of existing funds for direct costs")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("directCostsOverviewExisting", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("directCostsOverviewExisting", default: none) == none {
     return table-missing-msg
   }
 
-  let crcdata = s-crc-data.get().crc
-  let funds = s-crc-data.get().funding.directCostsOverviewExisting
+  let crcdata = metadata.value.crc
+  let funds = metadata.value.funding.directCostsOverviewExisting
 
   let sums-ending = (funds.previous.fold(0, (a,b) => a + b.applicantInstitution), funds.previous.fold(0, (a,b) => a + b.otherInstitution), funds.previous.fold(0, (a,b) => a + b.otherFunds))
   let total-ending = sums-ending.fold(0, (a,b) => a + b)
@@ -638,20 +676,24 @@
 
 #let funds-overview-existing-staff() = context {
   // 2.1.2 Overview of existing staff
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("staffOverviewExisting", default: none) != none, message: "There is no data available for the table 2.1.2 Overview of existing staff")
+    assert("funding" in metadata.value and metadata.value.funding.at("staffOverviewExisting", default: none) != none, message: "There is no data available for the table 2.1.2 Overview of existing staff")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("staffOverviewExisting", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("staffOverviewExisting", default: none) == none {
     return table-missing-msg
   }
 
-  let staff-existing = s-crc-data.get().funding.staffOverviewExisting
-  let aux-staff = s-crc-data.get().aux.positions
-  let aux-unis = s-crc-data.get().aux.universities
+  let staff-existing = metadata.value.funding.staffOverviewExisting
+  let aux-staff = metadata.value.aux.positions
+  let aux-unis = metadata.value.aux.universities
   
-  let person-db = s-crc-data.get().person
+  let person-db = metadata.value.person
 
   let tablebody = aux-staff.keys().map(it => 
   (
@@ -701,16 +743,20 @@
 
 #let funds-overview-existing-instrumentation() = context {
   // 2.1.3 List of existing instrumentation
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("listExistingInstrumentation", default: none) != none, message: "There is no data available for the table 2.1.3 List of existing instrumentation")
+    assert("funding" in metadata.value and metadata.value.funding.at("listExistingInstrumentation", default: none) != none, message: "There is no data available for the table 2.1.3 List of existing instrumentation")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("listExistingInstrumentation", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("listExistingInstrumentation", default: none) == none {
     return table-missing-msg
   }
 
-  let funds = s-crc-data.get().funding.listExistingInstrumentation
+  let funds = metadata.value.funding.listExistingInstrumentation
   let tablebody = funds.map(it => (
     [#project(it.project)], 
     [#it.instrument #if it.company != none [_(#it.company)_]], 
@@ -749,17 +795,21 @@
 
 #let funds-overview-previous-requested() = context {
   // 2.2.1 Overview
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("overviewOfAll", default: none) != none, message: "There is no data available for the table 2.2.1 Overview")
+    assert("funding" in metadata.value and metadata.value.funding.at("overviewOfAll", default: none) != none, message: "There is no data available for the table 2.2.1 Overview")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("overviewOfAll", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("overviewOfAll", default: none) == none {
     return table-missing-msg
   }
 
-  let crcdata = s-crc-data.get().crc
-  let funds = s-crc-data.get().funding.overviewOfAll
+  let crcdata = metadata.value.crc
+  let funds = metadata.value.funding.overviewOfAll
   let tb-previous = funds.previous.keys().filter(it => it != "Total").map(it => (
     [#crcdata.funding-years-previous.at(int(it) - 1)],
     [#num-or-zero(funds.previous.at(it).staff)],
@@ -856,20 +906,24 @@
 
 #let funds-overview-requested-staff() = context {
   // 2.2.2 Overview of funds requested for staff
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("staffOverviewRequested", default: none) != none, message: "There is no data available for the table 2.2.2 Overview of funds requested for staff")
+    assert("funding" in metadata.value and metadata.value.funding.at("staffOverviewRequested", default: none) != none, message: "There is no data available for the table 2.2.2 Overview of funds requested for staff")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("staffOverviewRequested", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("staffOverviewRequested", default: none) == none {
     return table-missing-msg
   }
 
   let positions = ([Postdocs], [Doctoral researchers], [Other research staff], [Non-research-staff], [Student assistants])
   set text(9pt)
 
-  let crc-db = s-crc-data.get().crc
-  let funds = s-crc-data.get().funding.staffOverviewRequested
+  let funds = metadata.value.funding.staffOverviewRequested
+  let crc = metadata.value.crc
 
   let tablebody = funds.filter(proj => proj.project != "Total").map(proj => (
     proj.keys().map(year => (
@@ -883,7 +937,7 @@
     )).flatten()
   )).flatten()
   
-  let cols-left-line = range(crc-db.funding-years.len()-1).map(it => (it*5) + 5 + 1) // determine position of new year block to draw vertical line
+  let cols-left-line = range(crc.funding-years.len()-1).map(it => (it*5) + 5 + 1) // determine position of new year block to draw vertical line
 
         
   let numrows = funds.len()
@@ -917,18 +971,18 @@
       } 
       st
     },
-    columns: (.5fr,) + (.25fr, )*s-crc-data.get().crc.funding-years.len()*5,
+    columns: (.5fr,) + (.25fr, )*crc.funding-years.len()*5,
     table.header(
       repeat: true,
       table.cell(
         rowspan: 2,
         rotate(-90deg, text(hyphenate: false, [*Project*])), 
       ),
-      ..s-crc-data.get().crc.funding-years.map(yr => table.cell(
+      ..crc.funding-years.map(yr => table.cell(
         colspan: 5,
         [*#yr*] 
       )),
-      ..s-crc-data.get().crc.funding-years.map(yr => 
+      ..crc.funding-years.map(yr => 
         positions.map(pos => 
           table.cell(
           fill: defs.table-style-defaults.table-header-fill,
@@ -943,7 +997,7 @@
         ))).flatten(),     
     ),
     ..tablebody,
-    table.hline(start: 0, end: 1+(s-crc-data.get().crc.funding-years.len()*5), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 1+(crc.funding-years.len()*5), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ..tablebody-totals
   )
 }
@@ -953,18 +1007,23 @@
 #let funds-overview-requested-instrumentation() = context {
   // 2.2.3 Overview of funds requested for instrumentation
 
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("instrumentation", default: none) != none, message: "There is no data available for the table 2.2.3 Overview of funds requested for instrumentation.")
+    assert("funding" in metadata.value and metadata.value.funding.at("instrumentation", default: none) != none, message: "There is no data available for the table 2.2.3 Overview of funds requested for instrumentation.")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("instrumentation", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("instrumentation", default: none) == none {
     return table-missing-msg
   }
 
-  let numyears = s-crc-data.get().crc.funding-years.len()
+  let crc = metadata.value.crc
+  let numyears = crc.funding-years.len()
     
-  let funds = s-crc-data.get().funding.instrumentation
-  let yrs = s-crc-data.get().crc.funding-years
+  let funds = metadata.value.funding.instrumentation
+  let yrs = crc.funding-years
   let sums = yrs.enumerate().map(it => funds.fold(0, (a,b) => a + b.years.at(it.at(0))))
   let funds_ = funds.map(it => it.project).dedup().map(proj => funds.map(it => it.category).dedup().map(category => funds.filter(f => f.category == category and f.project == proj).fold((years: (0,)*numyears), (prev, next) => (project: next.project, category: next.category, years: transpose((prev.years,) + (next.years,)).map(it => it.sum()))))).flatten()
   
@@ -990,7 +1049,7 @@
       leftcols: (1,), 
       rightcols: range(2, numcols)
     ),
-    columns: (.3fr, .7fr) + (.2fr,)*s-crc-data.get().crc.funding-years.len(),
+    columns: (.3fr, .7fr) + (.2fr,)*crc.funding-years.len(),
     table.header(
       repeat: true,
       table.cell(
@@ -1002,18 +1061,18 @@
         [*Description of instrumentation*]
       ),
       table.cell(
-        colspan: s-crc-data.get().crc.funding-years.len(),
+        colspan: crc.funding-years.len(),
         [*Funds requested for*]
       ),
-      ..s-crc-data.get().crc.funding-years.map(yr => table.cell(
+      ..crc.funding-years.map(yr => table.cell(
         align: center,
         fill: defs.table-style-defaults.table-header-fill,
         stroke: (bottom: (paint: defs.table-style-defaults.table-stroke-paint)),
         [*#yr*])),
-      table.hline(start: 0, end: 2 + (s-crc-data.get().crc.funding-years.len()), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
+      table.hline(start: 0, end: 2 + (crc.funding-years.len()), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ),
     ..tablebody,
-    table.hline(start: 0, end: 2 + (s-crc-data.get().crc.funding-years.len()), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
+    table.hline(start: 0, end: 2 + (crc.funding-years.len()), stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
     ..tablebody-totals,
     table.footer(
       table.cell(
@@ -1030,15 +1089,19 @@
 #let funds-upkeep-laboratory-animals() = context {
   // 2.3 Upkeep of laboratory animals
 
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("upkeepLabAnimals", default: none) != none, message: "There is no data available for the table 2.3 Upkeep of laboratory animals.")
+    assert("funding" in metadata.value and metadata.value.funding.at("upkeepLabAnimals", default: none) != none, message: "There is no data available for the table 2.3 Upkeep of laboratory animals.")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("upkeepLabAnimals", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("upkeepLabAnimals", default: none) == none {
     return [-- not applicable --]
   }
 
-  let funds = s-crc-data.get().funding.upkeepLabAnimals
+  let funds = metadata.value.funding.upkeepLabAnimals
   let tablebody = ()
 
   let numrows = calc.ceil(tablebody.len() / 5)
@@ -1068,17 +1131,23 @@
 
 #let proj-requested-funding() = context {
   // 3.8.2 Requested funding
-  
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("staffRequestedAmount", default: none) != none and s-crc-data.get().funding.at("directCostsRequested", default: none) != none and s-crc-data.get().funding.at("instrumentation", default: none) != none, message: "There is no data available for the table 3.8.2 Requested funding")
+    assert("funding" in metadata.value and metadata.value.funding.at("staffRequestedAmount", default: none) != none and metadata.value.funding.at("directCostsRequested", default: none) != none and metadata.value.funding.at("instrumentation", default: none) != none, message: "There is no data available for the table 3.8.2 Requested funding")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("staffRequestedAmount", default: none) == none or s-crc-data.get().funding.at("directCostsRequested", default: none) == none or s-crc-data.get().funding.at("instrumentation", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("staffRequestedAmount", default: none) == none or metadata.value.funding.at("directCostsRequested", default: none) == none or metadata.value.funding.at("instrumentation", default: none) == none {
     return table-missing-msg
   }
-  
-  let num-years = s-crc-data.get().crc.funding-years.len()
-  let aux = s-crc-data.get().aux.positions
+
+  let funding = metadata.value.funding
+  let num-years = metadata.value.crc.funding-years.len()
+  let aux = metadata.value.aux.positions
+  let crc = metadata.value.crc
   
   context {
     let current-project = s-current-project.get()
@@ -1086,7 +1155,7 @@
     //////////////////////////////////////////////////////////////////////////STAFF
     
     // calculate staff (allowed are requests for postDoc, phD, medDoc, research and nonresearch staff)
-    let funds-staff = s-crc-data.get().funding.staffRequestedAmount.filter(it => it.project == upper(current-project))
+    let funds-staff = funding.staffRequestedAmount.filter(it => it.project == upper(current-project))
     
     let funds-staff-totals = transpose(funds-staff.map(fse => 
     range(num-years).map(yr => 
@@ -1115,7 +1184,7 @@
     //////////////////////////////////////////////////////////////////////////COSTS
     
     // calculate direct costs (allowed are requests for equipment up to €10,000, software, and consumables, laboratory animals and other -- NO visits and travel costs!)
-    let funds-costs = s-crc-data.get().funding.directCostsRequested.filter(it => lower(it.project) == current-project)
+    let funds-costs = funding.directCostsRequested.filter(it => lower(it.project) == current-project)
 
     // group categories together to not let them occur multiple times in the table
     let funds-costs = funds-costs.map(it => it.category).dedup().map(category => funds-costs.filter(f => f.category == category).fold((years: (0,)*num-years), (prev, next) => (project: next.project, category: next.category, years: transpose((prev.years,) + (next.years,)).map(it => it.sum())))).flatten()
@@ -1146,7 +1215,7 @@
     /////////////////////////////////////////////////////////////////////FELLOWSHIPS
     
     // calculate fellowships (MGK)
-    let funds-fellow = s-crc-data.get().funding.fellowships.filter(it => lower(it.project) == current-project)
+    let funds-fellow = funding.fellowships.filter(it => lower(it.project) == current-project)
 
     // group categories together to not let them occur multiple times in the table
     let funds-fellow = funds-fellow.map(it => it.category).dedup().map(category => funds-fellow.filter(f => f.category == category).fold((years: (0,)*num-years), (prev, next) => (project: next.project, category: next.category, years: transpose((prev.years,) + (next.years,)).map(it => it.sum())))).flatten()
@@ -1177,7 +1246,7 @@
     /////////////////////////////////////////////////////////////////////////INVEST
     
     // calculate capital investments (allowed are requests for equipment costing between €10,000 and €50,000 and equipment costing over €50,000; decisive factor is purchase price (gross))
-    let funds-instrumentation = s-crc-data.get().funding.instrumentation.filter(it => it.project == upper(current-project))
+    let funds-instrumentation = funding.instrumentation.filter(it => it.project == upper(current-project))
 
     // group categories together to not let them occur multiple times in the table
     let funds-instrumentation = funds-instrumentation.map(it => it.category).dedup().map(category => funds-instrumentation.filter(f => f.category == category).fold((years: (0,)*num-years), (prev, next) => (project: next.project, category: next.category, years: transpose((prev.years,) + (next.years,)).map(it => it.sum())))).flatten()
@@ -1331,7 +1400,7 @@
         columns: (1fr,) + ((.5fr, .3fr))*num-years,
         table.header(
           repeat: true,
-          [*Funding for*], ..s-crc-data.get().crc.funding-years.map(year => table.cell(
+          [*Funding for*], ..crc.funding-years.map(year => table.cell(
             colspan: 2,
             [*#year*],
           )),
@@ -1364,25 +1433,33 @@
 
 #let proj-requested-funding-staff() = context {
   // 3.8.3 Requested funding for staff for the new funding period
-    
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("staffExistingRequestedDetails", default: none) != none, message: "There is no data available for the table 3.8.3 Requested funding for staff for the new funding period")
+    assert("funding" in metadata.value and metadata.value.funding.at("staffExistingRequestedDetails", default: none) != none, message: "There is no data available for the table 3.8.3 Requested funding for staff for the new funding period")
   }
 
-  let k = s-crc-data.get().funding.keys()
-  let positions = s-crc-data.get().aux.positions
-  let positionspi = s-crc-data.get().aux.position-pi
-  let persons = s-crc-data.get().person
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("staffExistingRequestedDetails", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("staffExistingRequestedDetails", default: none) == none {
     return table-missing-msg
   }
+  
+  let k = metadata.value.funding.keys()
+  let positions = metadata.value.aux.positions
+  let positionspi = metadata.value.aux.position-pi
+  let persons = metadata.value.person
+  let project = metadata.value.project
+  let funding = metadata.value.funding
+  
 
   context {
     let current-project = s-current-project.get()    
-    let status = s-crc-data.get().project.at(current-project).status
+    let status = project.at(current-project).status
 
     // get existing staff for current project from data
-    let staff-existing = s-crc-data.get().funding.staffExistingRequestedDetails.filter(it => it.project == upper(current-project) and it.type in ("ExistingResearchStaff", "ExistingNonResearchStaff")).sorted(key: it => (it.type, it.name))
+    let staff-existing = funding.staffExistingRequestedDetails.filter(it => it.project == upper(current-project) and it.type in ("ExistingResearchStaff", "ExistingNonResearchStaff")).sorted(key: it => (it.type, it.name))
 
     let staff-existing-research = staff-existing.filter(it => it.type == "ExistingResearchStaff").enumerate(start: 1)
     
@@ -1390,7 +1467,7 @@
 
     let stafftype = if status == "E" { "Approved" } else { "Requested" }
     // get requested staff for current project from data
-    let staff-requested = s-crc-data.get().funding.staffExistingRequestedDetails.filter(it => it.project == upper(current-project) and it.type in (stafftype + "ResearchStaff", stafftype + "NonResearchStaff")).sorted(key: it => (it.type, it.name))
+    let staff-requested = funding.staffExistingRequestedDetails.filter(it => it.project == upper(current-project) and it.type in (stafftype + "ResearchStaff", stafftype + "NonResearchStaff")).sorted(key: it => (it.type, it.name))
 
     let staff-requested-research = staff-requested.filter(it => it.type == stafftype + "ResearchStaff").enumerate(start: staff-existing-research.len() + staff-existing-nonresearch.len() + 1)
     
@@ -1590,23 +1667,29 @@
   
 ) = context {
   // 3.8.4 Requested funding for direct costs for the new funding period
-    
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("directCostsByInstitutions", default: none) != none, message: "There is no data available for the table 3.8.3 Requested funding for direct costs for the new funding period")
+    assert("funding" in metadata.value and metadata.value.funding.at("directCostsByInstitutions", default: none) != none, message: "There is no data available for the table 3.8.3 Requested funding for direct costs for the new funding period")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("directCostsByInstitutions", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("directCostsByInstitutions", default: none) == none {
     return table-missing-msg
   }
 
-  let num-years = s-crc-data.get().crc.funding-years.len()
-  let unis = s-crc-data.get().aux.universities
+  let num-years = metadata.value.crc.funding-years.len()
+  let unis = metadata.value.aux.universities
+  let funding = metadata.value.funding
+  let crc = metadata.value.crc
   
   context {
     let current-project = s-current-project.get()
     
-    let funds-existing = s-crc-data.get().funding.directCostsByInstitutions.filter(it => lower(it.project) == current-project)
-    let funds-requested = s-crc-data.get().funding.directCostsRequested.filter(it => lower(it.project) == current-project)
+    let funds-existing = funding.directCostsByInstitutions.filter(it => lower(it.project) == current-project)
+    let funds-requested = funding.directCostsRequested.filter(it => lower(it.project) == current-project)
     
     if funds-existing + funds-requested == () {
       return table-empty-msg
@@ -1644,7 +1727,7 @@
       columns: (1fr,) + ((.5fr,))*num-years,
       table.header(
         [], 
-        ..s-crc-data.get().crc.funding-years.map(year => [*#year*]),
+        ..crc.funding-years.map(year => [*#year*]),
         table.hline(start: 0, end: 1 + num-years, stroke: (thickness: defs.table-style-defaults.table-stroke-thin, paint: defs.table-style-defaults.table-stroke-paint)),
       ),
       ..tablebody-existing-main,
@@ -1661,7 +1744,7 @@
         ),
     )
 
-    let yrs = s-crc-data.get().crc.funding-years
+    let yrs = crc.funding-years
   
     for (idx, yr) in yrs.enumerate() {
       for category in funds-requested.map(it => it.category).dedup() {
@@ -1685,25 +1768,29 @@
 
 #let proj-requested-funding-global-funds() = context {
   // 3.5.5/3.6.7/3.8.7 (Requested) Global funds (MGK, WIKO, Z)
-    
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("directCostsByInstitutions", default: none) != none, message: "There is no data available for the table 3.8.3 Requested funding for direct costs for the new funding period")
+    assert("funding" in metadata.value and metadata.value.funding.at("directCostsByInstitutions", default: none) != none, message: "There is no data available for the table 3.8.3 Requested funding for direct costs for the new funding period")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("directCostsByInstitutions", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("directCostsByInstitutions", default: none) == none {
     return table-missing-msg
   }
 
   context {
     let current-project = s-current-project.get()
 
-    let globalfunds = s-crc-data.get().funding.globalfunds.filter(it => lower(it.project) == current-project)
+    let globalfunds = metadata.value.funding.globalfunds.filter(it => lower(it.project) == current-project)
 
     if globalfunds == () {
       return table-empty-msg
     }
     
-    let yrs = s-crc-data.get().crc.funding-years
+    let yrs = metadata.value.crc.funding-years
   
     for (idx, yr) in yrs.enumerate() {
       for category in globalfunds.map(it => it.category).dedup() {
@@ -1726,12 +1813,16 @@
 
 #let proj-requested-funding-fellowships() = context {
   // 3.8.6 Requested funding for fellowships (MGK)
-    
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("fellowships", default: none) != none, message: "There is no data available for the table 3.8.6 Requested funding for fellowships")
+    assert("funding" in metadata.value and metadata.value.funding.at("fellowships", default: none) != none, message: "There is no data available for the table 3.8.6 Requested funding for fellowships")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("fellowships", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("fellowships", default: none) == none {
     return table-missing-msg
   }
 
@@ -1739,14 +1830,14 @@
   context {
     let current-project = s-current-project.get()
     
-    let fellowships = s-crc-data.get().funding.fellowships.filter(it => lower(it.project) == current-project)
+    let fellowships = metadata.value.funding.fellowships.filter(it => lower(it.project) == current-project)
 
     if fellowships == () {
       return table-empty-msg
     }
     
-    let yrs = s-crc-data.get().crc.funding-years
-    let unis = s-crc-data.get().aux.universities
+    let yrs = metadata.value.crc.funding-years
+    let unis = metadata.value.aux.universities
   
     for (idx, yr) in yrs.enumerate() {
       if not fellowships.all(it => it.years.at(idx) == 0) {
@@ -1767,25 +1858,29 @@
 
 #let proj-requested-funding-instrumentation() = context {
   // 3.8.5 Requested funding for instrumentation
-    
+
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   if use-asserts {
-    assert(s-crc-data.get().keys().contains("funding") and s-crc-data.get().funding.at("instrumentation", default: none) != none, message: "There is no data available for the table 3.8.5 Requested funding for instrumentation")
+    assert("funding" in metadata.value and metadata.value.funding.at("instrumentation", default: none) != none, message: "There is no data available for the table 3.8.5 Requested funding for instrumentation")
   }
 
-  if not s-crc-data.get().keys().contains("funding") or s-crc-data.get().funding.at("instrumentation", default: none) == none {
+  if not "funding" in metadata.value or metadata.value.funding.at("instrumentation", default: none) == none {
     return table-missing-msg
   }
 
   context {
     let current-project = s-current-project.get()
 
-    let instrumentation = s-crc-data.get().funding.instrumentation.filter(it => lower(it.project) == current-project)
+    let instrumentation = metadata.value.funding.instrumentation.filter(it => lower(it.project) == current-project)
 
     if instrumentation == () {
       return table-empty-msg
     }
   
-    let yrs = s-crc-data.get().crc.funding-years
+    let yrs = metadata.value.crc.funding-years
   
     for (idx, yr) in yrs.enumerate() {
       for category in instrumentation.map(it => it.category).dedup() {

@@ -2,7 +2,7 @@
 
 == Project history
 
-@bib-t03-uhde2020robot
+@t03:uhde2020robot
 #lorem(50)
 
 === Report
@@ -11,7 +11,7 @@
 
 === Published project results <project-results>
 
-// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `bib-t03-` will be listed here.
+// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `<projectnumber>:` will be listed here.
 
 === Documentation of further activities
 

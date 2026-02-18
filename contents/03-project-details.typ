@@ -2,7 +2,7 @@
 
 = Project details
 
-#let proj = crc-project.with(colors: projectcolors)
+#let proj = crc-project
 
 #context {
   for pid in data.aux.project.map(it => lower(it)) {

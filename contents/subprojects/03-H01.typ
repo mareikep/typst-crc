@@ -14,7 +14,7 @@ first #pi("ecarter", first: true)\
 last #pi("ecarter", last: true)\
 full #pi("ecarter", full: true)\
 
-@bib-h01-uhde2020robot
+@h01:uhde2020robot
 
 == Project progress to date
 
@@ -26,7 +26,7 @@ full #pi("ecarter", full: true)\
 
 === Project- and subject-related list of publications <project-publications>
 
-// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `bib-h01-` will be listed here.
+// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `<projectnumber>:` will be listed here.
 
 == Project plan
 

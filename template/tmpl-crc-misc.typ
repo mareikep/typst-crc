@@ -1,18 +1,13 @@
-#import "@preview/alexandria:0.2.0": *
+#import "@preview/alexandria:0.2.2": *
 #import "@preview/zero:0.2.0": num, set-group, set-num, set-round
 #import "@preview/jumble:0.0.1"
 
 #import "../styles/cd-defs.typ" as defs
 #import "../dfg-research-areas.typ": dfg-research-areas
 
-// state information to be filled with metadata from YAML files
-#let s-crc-data = state("crc-data", (:))
-#let s-crc-persons = state("crc-persons", (:))
-#let s-crc-projects = state("crc-projects", (:))
-#let s-crc-funding = state("crc-funding", (:))
-#let s-crc-aux = state("crc-aux", (:))
 #let s-current-project = state("current-project", none)
 #let s-publicationlists = state("publicationlists", (:))
+#let s-project-refs = state("project-refs", (:))
 #let s-defs = state("defs", defs)
 
 #let table-empty-msg = [-- None --]
@@ -199,12 +194,19 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#let project-references(
-  project, 
-  refs
-) = context {
-  s-crc-data.update(orig-d => orig-d + (project + "-refs": refs))
-  [updated refs to #s-crc-data.get().keys()]
+#let publication-categories(project, group, ..refs) = context {
+  s-publicationlists.update(orig-d => orig-d + (
+      (project): orig-d.at(project, default: (:)) + (
+        (group): refs.pos().flatten()
+      ),
+    )
+  )
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+#let set-own-refs(project, ..refs) = context {
+  s-project-refs.update(orig-d => orig-d + ((project): refs.pos()))
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -249,18 +251,21 @@
 // this function draws a signature line including 
 // date/city/name/role for the given role. The relevant
 // data is taken from the metadata
-// Note: `role` can either be a string (id of person) or a dict (person data), 
-// since this function might be called before s-crc-data is set up
+// Note: `role` can either be a string (id of person) or a dict (person data)
 #let signature(
   role,
   date,
   city
 ) = context {
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
   let pdata = role
   if type(role) == str {
-    assert(s-crc-data.get().person.pairs().filter(it => it.at(1).vip).find(it => it.at(1).specialRole == role) != none, message: "Role " + role + " for signature does not exist.")
-    let pid = s-crc-data.get().person.pairs().filter(it => it.at(1).vip).find(it => it.at(1).specialRole == role).first()
-    pdata = s-crc-data.get().person.at(pid)
+    assert(metadata.value.person.pairs().filter(it => it.at(1).vip).find(it => it.at(1).specialRole == role) != none, message: "Role " + role + " for signature does not exist.")
+    let pid = metadata.value.person.pairs().filter(it => it.at(1).vip).find(it => it.at(1).specialRole == role).first()
+    pdata = metadata.value.person.at(pid)
   }
   
   grid(
@@ -306,16 +311,19 @@
 
 // this function generates the content for a person's info, 
 // as for example printed at the beginning of each subproject
-// Note: `pi` can either be a string (id of person) or a dict (person data), 
-// since this function might be called before s-crc-data is set up
+// Note: `pi` can either be a string (id of person) or a dict (person data)
 #let personInfo(
   pi,
   icons: true
 ) = context {
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+  
   let pi = pi
   if type(pi) == str {
-    assert(s-crc-data.get().person.keys().contains(pi), message: "PI " + pi + " does not exist in the database.")
-    pi = s-crc-data.get().person.at(pi)
+    assert(metadata.value.person.keys().contains(pi), message: "PI " + pi + " does not exist in the database.")
+    pi = metadata.value.person.at(pi)
   }
   
   set par(justify: false)
@@ -354,9 +362,15 @@
 	full: false,
    nostatus: false
 ) = context {
-  assert(s-crc-data.get().project.keys().contains(lower(id)), message: "Project " + id + " does not exist in the database.")
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
   
-  let colors = s-crc-data.get().colors
+  assert(metadata.value.project.keys().contains(lower(id)), message: "Project " + id + " does not exist in the database.")
+
+  let project = metadata.value.project
+  
+  let colors = metadata.value.colors
   let c = if colors.research.keys().contains(lower(id.at(0))) { 
     colors.research.at(lower(id.at(0))) 
     } else if colors.mgk.keys().contains(lower(id)) { 
@@ -374,13 +388,13 @@
   // generate styled content
   let cnt = none
   if number {
-    cnt = [#text(c, [*#s-crc-data.get().project.at(lower(id)).number*])#if s-crc-data.get().project.at(lower(id)).status != "C" and not nostatus { [-#s-crc-data.get().project.at(lower(id)).status]}]
+    cnt = [#text(c, [*#project.at(lower(id)).number*])#if project.at(lower(id)).status != "C" and not nostatus { [-#project.at(lower(id)).status]}]
   } else if name {
-    cnt = [#s-crc-data.get().project.at(lower(id)).name]
+    cnt = [#project.at(lower(id)).name]
   } else if full {
-    cnt = [#text(c, [*#s-crc-data.get().project.at(lower(id)).number*])#if s-crc-data.get().project.at(lower(id)).status != "C" and not nostatus { [-#s-crc-data.get().project.at(lower(id)).status]} - #s-crc-data.get().project.at(lower(id)).name]
+    cnt = [#text(c, [*#project.at(lower(id)).number*])#if project.at(lower(id)).status != "C" and not nostatus { [-#project.at(lower(id)).status]} - #project.at(lower(id)).name]
   } else {
-    cnt = [#text(c, [*#s-crc-data.get().project.at(lower(id)).number*])#if s-crc-data.get().project.at(lower(id)).status != "C" and not nostatus { [-#s-crc-data.get().project.at(lower(id)).status]}]
+    cnt = [#text(c, [*#project.at(lower(id)).number*])#if project.at(lower(id)).status != "C" and not nostatus { [-#project.at(lower(id)).status]}]
   }
 
   // if the link does not exist, create only the styled content
@@ -426,19 +440,25 @@
 	last: false,
 	full: false
 ) = context {
-  assert(s-crc-data.get().person.keys().contains(id), message: "PI " + id + " does not exist in the database.")
+  // load metadata
+  let metadata = query(metadata).find(it => "kind" in it.value and it.value.kind == "crc-data")
+  metadata = if metadata != none { metadata } else { (:) }
+
+  assert("person" in metadata.value and metadata.value.person.keys().contains(id), message: "PI " + id + " does not exist in the database.")
+
+  let person = metadata.value.person
 
   // generate styled content
   let cnt = none
-	if first {
-    cnt = [*#s-crc-data.get().person.at(lower(id)).name-first #s-crc-data.get().person.at(lower(id)).name*]
-	} else if last {
-    cnt = [*#s-crc-data.get().person.at(lower(id)).name*]
-	} else if full {
-		cnt = [#if s-crc-data.get().person.at(lower(id)).title != none { [#s-crc-data.get().person.at(lower(id)).title] } *#s-crc-data.get().person.at(lower(id)).name-first #s-crc-data.get().person.at(lower(id)).name*#if s-crc-data.get().person.at(lower(id)).titlesuffix != none { [, #s-crc-data.get().person.at(lower(id)).titlesuffix] }]
-	} else {
-		cnt = [*#s-crc-data.get().person.at(lower(id)).name*]
-	}
+  if first {
+    cnt = [*#person.at(lower(id)).name-first #person.at(lower(id)).name*]
+  } else if last {
+    cnt = [*#person.at(lower(id)).name*]
+  } else if full {
+    cnt = [#if person.at(lower(id)).title != none { [#person.at(lower(id)).title] } *#person.at(lower(id)).name-first #person.at(lower(id)).name*#if person.at(lower(id)).titlesuffix != none { [, #person.at(lower(id)).titlesuffix] }]
+  } else {
+    cnt = [*#person.at(lower(id)).name*]
+  }
 
   // if the link does not exist, create only the styled content
   if query(label("pi-" + lower(id))) != () {

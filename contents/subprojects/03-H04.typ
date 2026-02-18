@@ -1,18 +1,13 @@
 #import "../../crc-imports.typ": *
 
 // define, which publications should appear in the sub-categories of the reference lists. keys: (other, quality, patents)
-#context s-publicationlists.update((
-  s-current-project.get(): (
-    other: ("uhde2020robot",), 
-    patents: ("cheng2020neuroengineering",),
-    quality: ()
-  ))
-)
+#context publication-categories(s-current-project.get(), "quality", ("uhde2020robot",))
+#context publication-categories(s-current-project.get(), "other", ("cheng2020neuroengineering",))
 
 == Project history
 
-@bib-h04-uhde2020robot
-@bib-h04-cheng2020neuroengineering
+@h04:uhde2020robot
+@h04:cheng2020neuroengineering
 
 === Report
 
@@ -31,7 +26,7 @@ $
 
 === Published project results <project-results>
 
-// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `bib-<projectnumber>-` will be listed here.
+// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `<projectnumber>:` will be listed here.
 
 == Funding
 

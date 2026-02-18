@@ -2,7 +2,7 @@
 
 == Summary
 
-@bib-inf-uhde2020robot
+@inf:uhde2020robot
 #lorem(50)
 
 == Project progress to date
@@ -15,7 +15,7 @@
 
 === Project- and subject-related publications <project-publications>
 
-// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `bib-inf-` will be listed here.
+// DO NOT TOUCH! The reference list(s) will be automatically generated. All citations within this file that are prefixed with `<projectnumber>:` will be listed here.
 
 == Project plan
 
